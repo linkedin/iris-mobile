@@ -1,0 +1,16 @@
+<div class="graph-content">
+  <ion-segment [(ngModel)]="graphType" color="primary">
+      <ion-segment-button value="original">Original Graph</ion-segment-button>
+      <ion-segment-button value="current">Current Data</ion-segment-button>
+  </ion-segment>
+  <h4 *ngIf="label">{{ label }}</h4>
+  <div class="graph-container">
+    <ion-spinner *ngIf="loading" class="graph-loader"></ion-spinner>
+    <div [hidden]="graphType !== 'original' || loading">
+      <img src="{{ original }}">
+    </div>
+    <div [hidden]="graphType !== 'current' || loading">
+      <img src="{{ current }}">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Incident Context</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="context-content">
+  <!-- Extended FAB -->
+  <button ion-fixed ion-button icon-left class="extended-fab" (click)="claim()" *ngIf="incident?.active" [disabled]="disableClaim">
+    <ion-icon name="custom-claim"></ion-icon>Claim
+  </button>
+
+  <ion-spinner *ngIf="loading" class="incident-loader"></ion-spinner>
+  <div class="incident-info" padding *ngIf="!loading">
+    <h4 class="incident-title">{{ incident?.title }}</h4>
+    <span *ngIf="incident?.owner; else unclaimed" class="claim-info">
+      Claimed by: {{ incident.owner }}
+    </span>
+    <ng-template #unclaimed>
+    <span class="claim-info">
+      Unclaimed!
+    </span>
+    </ng-template>
+  </div>
+  <!-- Graphs render here -->
+  <div #graphContainer class="graph-content"></div>
+  <!-- If we have a template, render that here -->
+  <div *ngIf="template" [innerHTML]="source" padding></div>
+  <!-- Otherwise, apply default styling -->
+  <hr *ngIf="noTemplate" class="context-divider">
+  <div *ngIf="noTemplate" padding>
+    <ul class="context-list">
+      <li class="context-item" *ngFor="let key of objectKeys(incident.context)" [hidden]="!incident.context[key]">
+        <h1>{{ key | titlecase }}</h1>
+        <pre class="context-value">{{ incident.context[key] | formatContext }}</pre>
+      </li>
+    </ul>
+  </div>
+  <div class="context-padding"></div>
+</ion-content>

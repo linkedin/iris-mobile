@@ -1,0 +1,64 @@
+page-incidents {
+
+    @keyframes fadeIn {
+        from { transform: scale(0.1); }
+        to { transform: scale(1); }
+    }
+    .fadeIn {
+        animation-name: fadeIn;
+        animation-duration: .1s;
+    }
+
+    .incidentCheck {
+        display: flex;
+        align-items: center;
+    }
+
+    ion-item.active {
+        font-weight: bold;
+        border-left: solid red;
+    }
+
+    ion-item.item-checkbox-checked {
+        background: lightgray;
+    }
+
+    .incident-title {
+        font-size: 1.7rem;
+        margin-bottom: .3rem;
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .incident-info {
+        font-size: 1.4rem;
+        color: #777;
+    }
+
+    .incident-loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 3rem;
+    }
+
+    .self-claimed {
+        color: #488aff;
+        font-weight: 500;
+    }
+
+    #slideIcon {
+        margin-bottom: 5px;
+    }
+
+    ion-list.incidents-list .fullBorder[no-lines] {
+        border-bottom: 1px solid #dedede;
+    }
+
+    .debounce {
+        pointer-events: none;
+    }
+}

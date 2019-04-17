@@ -1,0 +1,13 @@
+{
+  "name": "iris",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/iris_api",
+      "proxyUrl": "http://localhost:16648"
+    }
+  ]
+}

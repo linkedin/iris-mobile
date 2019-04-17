@@ -1,0 +1,104 @@
+{
+  "name": "Iris",
+  "version": "1.0.0",
+  "author": "Iris Team",
+  "homepage": "https://iris.claims/",
+  "private": true,
+  "scripts": {
+    "start": "ionic-app-scripts serve",
+    "clean": "ionic-app-scripts clean",
+    "build": "ionic-app-scripts build",
+    "lint": "ionic-app-scripts lint"
+  },
+  "dependencies": {
+    "@angular/animations": "5.2.11",
+    "@angular/common": "5.2.11",
+    "@angular/compiler": "5.2.11",
+    "@angular/compiler-cli": "5.2.11",
+    "@angular/core": "5.2.11",
+    "@angular/forms": "5.2.11",
+    "@angular/http": "5.2.11",
+    "@angular/platform-browser": "5.2.11",
+    "@angular/platform-browser-dynamic": "5.2.11",
+    "@ionic-native/barcode-scanner": "^4.20.0",
+    "@ionic-native/camera": "^4.20.0",
+    "@ionic-native/core": "^4.20.0",
+    "@ionic-native/deeplinks": "^4.20.0",
+    "@ionic-native/in-app-browser": "^4.20.0",
+    "@ionic-native/push": "^4.20.0",
+    "@ionic-native/qr-scanner": "^4.20.0",
+    "@ionic-native/splash-screen": "^4.10.1",
+    "@ionic-native/status-bar": "^4.10.1",
+    "@ionic/storage": "^2.2.0",
+    "@types/crypto-js": "^3.1.43",
+    "cordova-android": "7.1.4",
+    "cordova-ios": "4.5.5",
+    "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-inappbrowser": "^3.0.0",
+    "cordova-plugin-ionic-keyboard": "^2.1.3",
+    "cordova-plugin-ionic-webview": "^4.0.1",
+    "cordova-plugin-splashscreen": "^5.0.2",
+    "cordova-plugin-whitelist": "^1.3.3",
+    "cordova-sqlite-storage": "^2.6.0",
+    "cordova-support-google-services": "^1.1.0",
+    "crypto-js": "^3.1.9-1",
+    "deeplinks": "0.0.0",
+    "handlebars": "^4.1.0",
+    "he": "^1.2.0",
+    "ionic-angular": "3.9.2",
+    "ionic-native": "^2.9.0",
+    "ionic-plugin-deeplinks": "^1.0.17",
+    "ionicons": "3.0.0",
+    "phonegap-plugin-barcodescanner": "^8.0.1",
+    "phonegap-plugin-multidex": "^1.0.0",
+    "phonegap-plugin-push": "^2.2.3",
+    "rxjs": "5.5.11",
+    "sw-toolbox": "3.6.0",
+    "zone.js": "0.8.26"
+  },
+  "devDependencies": {
+    "@ionic/app-scripts": "3.2.3",
+    "typescript": "~2.6.2"
+  },
+  "description": "Iris: on-call incident escalation",
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-inappbrowser": {},
+      "phonegap-plugin-push": {
+        "ANDROID_SUPPORT_V13_VERSION": "27.+",
+        "FCM_VERSION": "11.6.2"
+      },
+      "phonegap-plugin-barcodescanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
+      "ionic-plugin-deeplinks": {
+        "URL_SCHEME": "iris",
+        "DEEPLINK_HOST": "iris.claims",
+        "DEEPLINK_SCHEME": "https",
+        "ANDROID_PATH_PREFIX": "/",
+        "ANDROID_2_PATH_PREFIX": "/",
+        "ANDROID_3_PATH_PREFIX": "/",
+        "ANDROID_4_PATH_PREFIX": "/",
+        "ANDROID_5_PATH_PREFIX": "/",
+        "DEEPLINK_2_SCHEME": " ",
+        "DEEPLINK_2_HOST": " ",
+        "DEEPLINK_3_SCHEME": " ",
+        "DEEPLINK_3_HOST": " ",
+        "DEEPLINK_4_SCHEME": " ",
+        "DEEPLINK_4_HOST": " ",
+        "DEEPLINK_5_SCHEME": " ",
+        "DEEPLINK_5_HOST": " "
+      }
+    },
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  }
+}

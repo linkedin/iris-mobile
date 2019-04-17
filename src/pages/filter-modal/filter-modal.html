@@ -1,0 +1,38 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Filter Incidents</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="dismiss(false)">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list *ngIf="filters" class="filter-list" no-lines>
+    <div class="filter-header">Preset filters:</div>
+    <ion-item class="filter-item">
+      <ion-label>Active</ion-label>
+      <ion-checkbox class="filter-checkbox" [(ngModel)]="filters.active"></ion-checkbox>
+    </ion-item>
+    <ion-item class="filter-item">
+      <ion-label>Inactive</ion-label>
+      <ion-checkbox class="filter-checkbox" [(ngModel)]="filters.inactive"></ion-checkbox>
+    </ion-item>
+    <div class="filter-divider">Custom filters:</div>
+    <ion-item class="filter-item">
+      <ion-label class="input-filter">
+        <ion-item class="filter-label">
+          <ion-label color="primary">User:</ion-label>
+          <ion-input placeholder="Username" clearInput="true" [(ngModel)]="this.usernameVal" (keyup.enter)="filterUser()"></ion-input>
+        </ion-item>
+      </ion-label>
+      <ion-checkbox class="filter-checkbox" [(ngModel)]="this.userFilter"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+  <button ion-button float-right class="filter-button" (click)="dismiss(true)">Filter</button>
+</ion-content>

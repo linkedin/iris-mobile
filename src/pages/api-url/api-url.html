@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-navbar [hidden]=loading color="primary">
+    <ion-title>Configure API URL</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding [hidden]=loading>
+
+  <p>Type in url or scan code</p>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="this.baseUrl" placeholder="Base URL"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="this.loginUrl" placeholder="Log-in URL"></ion-input>
+  </ion-item>
+  <div padding>
+    <button ion-button block color="light" (click)="scanCode()">Scan Code</button>
+  </div>
+  <div padding>
+    <button ion-button block expand="fill" color="primary" (click)="setBaseUrl() ">Submit</button>
+  </div>
+
+</ion-content>

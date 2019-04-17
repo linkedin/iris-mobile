@@ -1,0 +1,33 @@
+graph-block {
+
+    .graph-content{
+        box-shadow:
+            0 2px 4px 0 rgba(0,0,0,0.16),
+            0 2px 10px 0 rgba(0,0,0,0.12);
+    }
+
+    h4 {
+        text-align: center;
+        margin: 5px;
+    }
+
+    .graph-loader {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: auto;
+        transform: translate(-50%, -50%);
+    }
+
+    img {
+        width: 100%;
+    }
+
+    .graph-container {
+        position: relative;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        min-height: 80px;
+    }
+}

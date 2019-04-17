@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-navbar color="primary" [class.fadeOut]="selectMode" *ngIf="!selectMode">
+    <ion-title>
+      Incidents
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openActionSheet()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-navbar color="dark" *ngIf="selectMode">
+    <ion-buttons left>
+      <button ion-button icon-only (click)="hideCheckboxes()" class="fadeIn" showWhen="android">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      Claim Incidents
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="claimChecked()" class="fadeIn" showWhen="android">
+        <ion-icon name="custom-claim"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="openActionSheet()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-spinner [hidden]="!loading" class="incident-loader"></ion-spinner>
+  <ion-refresher (ionRefresh)="refreshIncidents($event)">
+    <ion-refresher-content
+      refreshingText="Refreshing incidents...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list [hidden]="loading" class="incidents-list">
+    <ion-item-sliding  *ngFor="let i of incidents" #slideItem>
+      <ion-item no-lines class="fullBorder" [class.debounce]="i.debounce" [class.active]="i.incident.active" (press)="incidentHeld(i)" (tap)="incidentTapped(i)">
+        <ion-label>
+          <div class="incident-title">{{i.incident.title}}<span *ngIf="!i.incident.title">{{i.incident.application | titlecase}} Incident</span></div>
+          <div class="incident-info">{{i.incident.created * 1000 | date:'MMM d, H:mm'}}<span *ngIf="i.incident.owner" [class.self-claimed]="i.incident.owner==irisInfo?.username"> - claimed by {{i.incident.owner}}</span></div>
+        </ion-label>
+        <ion-checkbox [class.checked]="i.selected" item-end [hidden]="!selectMode" [(ngModel)]="i.selected" class="incidentCheck fadeIn"></ion-checkbox>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="secondary" [disabled]="i.claimDisabled" (click)="claimItem(i, slideItem);">
+          <ion-icon name="custom-claim" id="slideIcon"></ion-icon>
+          Claim
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+    <ion-item *ngIf="!autoscroll">No more incidents</ion-item>
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+   <ion-infinite-scroll-content></ion-infinite-scroll-content>
+ </ion-infinite-scroll>
+ <ion-footer showWhen="ios" *ngIf="selectMode">
+   <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button icon-left (click)="hideCheckboxes()">
+        <ion-icon name="arrow-back"></ion-icon> Cancel
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+        <button ion-button icon-left (click)="claimChecked()">
+          <ion-icon class="custom-claim"></ion-icon> Claim
+        </button>
+      </ion-buttons>
+   </ion-toolbar>
+ </ion-footer>
+</ion-content>

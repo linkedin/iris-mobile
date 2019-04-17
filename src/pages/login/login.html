@@ -1,0 +1,27 @@
+<ion-header>
+
+  <ion-navbar *ngIf="!loading" color="primary">
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding *ngIf="!loading">
+  <ion-grid>
+    <ion-row>
+      <ion-col text-center>
+      Welcome to Iris! Log in to begin.<br>
+      <button ion-button (click)="showSSO()">Log in</button>
+      </ion-col>
+    </ion-row>
+    <ion-row text-center *ngIf="debug">
+      <ion-col>
+      <h3>Debug Login</h3>
+      <p>Enter username</p>
+        <ion-input placeholder="Username" [(ngModel)]="this.username"></ion-input>
+      <button ion-button (click)="debugLogin()">Log in (debug)</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

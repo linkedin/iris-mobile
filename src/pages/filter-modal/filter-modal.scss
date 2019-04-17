@@ -1,0 +1,31 @@
+page-filter-modal {
+    .filter-label {
+        all: unset;
+        display: flex;
+    }
+    .input-filter {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    .filter-list ion-item {
+        padding-left: 0;
+    }
+    .filter-list .filter-item .filter-checkbox {
+        margin-right: 15px;
+    }
+    .filter-header,
+    .filter-divider {
+        color: #757575;
+    }
+    .filter-divider {
+        border-top: 1px solid #dedede;
+        padding-top: 20px;
+    }
+    .filter-button {
+        margin-top: 20px;
+    }
+}
+
+.ios page-filter-modal ion-input {
+    border-bottom: 1px solid #dedede;
+}

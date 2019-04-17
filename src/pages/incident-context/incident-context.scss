@@ -1,0 +1,86 @@
+page-incident-context {
+
+    .incident-loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 3rem;
+    }
+
+    .extended-fab {
+        width: 100px;
+        height: 40px;
+        border-radius:20px;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .context-padding {
+        height: 40px;
+    }
+
+    .extended-fab ion-icon {
+        width: 1.2em;
+        height: .8em;
+        mask-position: 0% 50%;
+    }
+
+    .context-content {
+        background-color: #f5f5f5
+    }
+
+    .incident-info h4 {
+        margin-top: 0;
+        margin-bottom: .5rem;
+    }
+
+    .incident-info .claim-info {
+        color: gray;
+    }
+
+    .graph-content {
+        background-color: #fff;
+    }
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding-inline-start: 0;
+    }
+
+    ul.context-list .context-item {
+        width: 100%;
+        margin-bottom: .7em;
+    }
+
+    ul.context-list .context-item h1 {
+        color: gray;
+        font-size: 1.6em;
+        margin-bottom: .1em;
+        margin-top: 0;
+        font-weight: normal;
+    }
+
+    ul.context-list h2 {
+        margin-bottom: .1em;
+        margin-top: 0;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    ul.context-list p {
+        margin-top: 0;
+        margin-bottom: .5rem;
+    }
+
+    ul.context-list li .context-value {
+        white-space: pre-wrap;
+    }
+
+    hr.context-divider {
+        width: 95%;
+        background-color: #aaa;
+    }
+}
