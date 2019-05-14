@@ -9,6 +9,7 @@ import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 import { IrisProvider, Incident, IncidentFilters } from '../../providers/iris/iris';
 import { ApiUrlPage } from '../api-url/api-url';
 import { LoginPage } from '../login/login';
+import { OncallPage } from '../oncall/oncall';
 import { IncidentContextPage } from '../incident-context/incident-context';
 import { FilterModalPage } from '../filter-modal/filter-modal';
 
@@ -64,6 +65,26 @@ export class IncidentsPage {
       if (!this.initialized) {
         this.initIncidents();
         this.initPushNotification();
+        this.iris.getOncallUsers().subscribe(
+          () => {},
+          (err) => {
+            this.createToast('Error: failed to fetch oncall users.')
+          },
+          () => {}, // complete handler
+        );
+        this.iris.getOncallTeams().subscribe(
+          () => {},
+          (err) => {
+            this.createToast('Error: failed to fetch oncall teams.')
+          }
+        );
+        this.iris.getOncallServices().subscribe(
+          () => {},
+          (err) => {
+            this.createToast('Error: failed to fetch oncall services.')
+          }
+        );
+
       } else {
         let incidents = Array.from(this.iris.incidents.values());
         incidents = incidents.sort((a, b) => {return b['created'] - a['created']});
@@ -214,6 +235,13 @@ export class IncidentsPage {
             this.showClaimAll()
           },
           icon: 'custom-claim'
+        },
+        {
+          text: 'Oncall',
+          handler: () => {
+            this.navCtrl.setRoot(OncallPage);
+          },
+          icon: 'person'
         },
         {
           text: 'Log out',

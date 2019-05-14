@@ -4,6 +4,9 @@ import { Storage } from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Subject, Observable } from 'rxjs';
 import { IrisInfoProvider } from '../iris_info/iris_info';
+import { forkJoin } from "rxjs/observable/forkJoin";
+import { List } from 'ionic-angular/umd';
+import { ObservableInput } from 'rxjs/Observable';
 
 export class Incident {
   active: boolean;
@@ -18,6 +21,34 @@ export class Incident {
   updated: number;
   title: string;
 }
+
+export class OncallUser {
+  id: number;
+  name: string;
+  full_name: string;
+  time_zone: string;
+  photo_url: string;
+  active: number;
+  god: number;
+  contacts: any;
+  upcoming_shifts: any;
+  teams: any;
+}
+
+export class OncallTeam {
+  name: string;
+  email: string;
+  slack_channel: string;
+  summary: any;
+  services: string[];
+  rosters: any;
+}
+
+export class OncallService {
+  name: string;
+  team: string;
+}
+
 
 export class GraphData {
   current: string;
@@ -52,13 +83,20 @@ class TokenResponse {
 @Injectable()
 export class IrisProvider {
   dummyRedirect: string = 'http://localhost:7000';
-  apiPath: string = '/api/v0/mobile';
+  apiPath: string = '/api/v0/mobile/iris';
+  oncallApiPath: string = '/api/v0/mobile/oncall';
   tokenLeeway: number = 600;
   incidents: Map<number, Incident>;
+  oncallUsers: Array<OncallUser>;
+  oncallTeams: Array<OncallTeam>;
+  oncallServices: Array<OncallService>;
 
   constructor(public http: HttpClient, private storage: Storage, private irisInfo: IrisInfoProvider,
     private iab: InAppBrowser) {
       this.incidents = new Map();
+      this.oncallUsers = [];
+      this.oncallTeams = [];
+      this.oncallServices = [];
     }
 
   // Ensures valid refresh token, then renews access key
@@ -165,6 +203,83 @@ export class IrisProvider {
 
   public clearIncidents() {
     this.incidents.clear();
+  }
+  public clearOncallUsers() {
+    this.oncallUsers = [];
+  }
+  public clearOncallTeams() {
+    this.oncallTeams = [];
+  }
+  public clearOncallSerices() {
+    this.oncallServices = [];
+  }
+
+  // get list of all active oncall users
+  public getOncallUsers() : Observable<OncallUser[]> {
+    let params = {},
+    startObservable = this.renewAccessKey();
+
+    // Get incidents according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<OncallUser[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users`, { params: new HttpParams({fromObject: params}) }));
+
+    return returnObservable
+      .do(users => {
+        for (let i of users) {
+          this.oncallUsers.push(i);
+        }
+      });
+  }
+
+  // get list of all active oncall users
+  public getOncallUser(username) : Observable<any> {
+
+    let startObservable = this.renewAccessKey(),
+    user_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}`),
+    teams_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}/teams`),
+    shifts_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}/upcoming`);
+
+    // Get all user data from multiple api endpoints
+    var returnObservable = startObservable
+      .flatMap(() => forkJoin([user_get, teams_get, shifts_get]));
+
+    return returnObservable;
+  }
+
+  // get list of all active oncall teams
+  public getOncallTeams() : Observable<OncallTeam[]> {
+    let params = {},
+    startObservable = this.renewAccessKey();
+
+    // Get incidents according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<OncallTeam[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams`, { params: new HttpParams({fromObject: params}) }));
+
+    return returnObservable
+      .do(teams => {
+        for (let i of teams) {
+          this.oncallTeams.push(i);
+        }
+      });
+
+      
+  }
+
+    // get list of all active oncall users
+  public getOncallServices() : Observable<OncallService[]> {
+    let params = {},
+    startObservable = this.renewAccessKey();
+
+    // Get incidents according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<OncallService[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/services`, { params: new HttpParams({fromObject: params}) }));
+
+    return returnObservable
+      .do(services => {
+        for (let i of services) {
+          this.oncallServices.push(i);
+        }
+      });
   }
 
   // Get incident info from filters specified.

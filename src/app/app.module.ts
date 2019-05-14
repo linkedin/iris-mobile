@@ -10,6 +10,8 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { MyApp } from './app.component';
 import { IncidentsPage } from '../pages/incidents/incidents';
 import { LoginPage } from '../pages/login/login';
+import { OncallPage } from '../pages/oncall/oncall';
+import { OncallUserPage } from '../pages/oncall-user/oncall-user';
 import { FilterModalPage } from '../pages/filter-modal/filter-modal';
 import { ApiUrlPage } from '../pages/api-url/api-url';
 
@@ -25,6 +27,7 @@ import { IrisInfoProvider } from '../providers/iris_info/iris_info';
 import { Push } from '@ionic-native/push';
 import { FormsModule } from '@angular/forms';
 import { Deeplinks } from '@ionic-native/deeplinks';
+import { OncallProvider } from '../providers/oncall/oncall';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,8 @@ import { Deeplinks } from '@ionic-native/deeplinks';
     IncidentsPage,
     IncidentContextPage,
     LoginPage,
+    OncallPage,
+    OncallUserPage,
     GraphBlockComponent,
     FormatContextPipe,
     FilterModalPage,
@@ -49,7 +54,9 @@ import { Deeplinks } from '@ionic-native/deeplinks';
     MyApp,
     IncidentsPage,
     IncidentContextPage,
+    OncallUserPage,
     LoginPage,
+    OncallPage,
     GraphBlockComponent,
     FilterModalPage,
     ApiUrlPage
@@ -65,7 +72,8 @@ import { Deeplinks } from '@ionic-native/deeplinks';
     IrisInfoProvider,
     BarcodeScanner,
     Push,
-    Deeplinks
+    Deeplinks,
+    OncallProvider
   ]
 })
 export class AppModule {}
