@@ -231,7 +231,7 @@ export class IrisProvider {
       });
   }
 
-  // get list of all active oncall users
+  // get get full oncall user
   public getOncallUser(username) : Observable<any> {
 
     let startObservable = this.renewAccessKey(),
@@ -241,7 +241,7 @@ export class IrisProvider {
 
     // Get all user data from multiple api endpoints
     var returnObservable = startObservable
-      .flatMap(() => forkJoin([user_get, teams_get, shifts_get]));
+      .flatMap(() => forkJoin([user_get, shifts_get, teams_get]));
 
     return returnObservable;
   }
@@ -262,10 +262,23 @@ export class IrisProvider {
         }
       });
 
-      
   }
 
-    // get list of all active oncall users
+    // get full oncall team
+    public getOncallTeam(team_name) : Observable<any> {
+
+      let startObservable = this.renewAccessKey(),
+      team_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams/${team_name}`),
+      summary_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams/${team_name}/summary`);
+  
+      // Get all user data from multiple api endpoints
+      var returnObservable = startObservable
+        .flatMap(() => forkJoin([team_get, summary_get]));
+  
+      return returnObservable;
+    }
+
+  // get list of all active oncall users
   public getOncallServices() : Observable<OncallService[]> {
     let params = {},
     startObservable = this.renewAccessKey();
@@ -281,6 +294,18 @@ export class IrisProvider {
         }
       });
   }
+
+  public getOncallService(service) : Observable<string[]> {
+    let startObservable = this.renewAccessKey();
+
+    // Get incidents according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/services/${service}/teams`));
+
+    return returnObservable;
+
+  }
+  
 
   // Get incident info from filters specified.
   public getIncidents(filters: IncidentFilters) : Observable<Incident[]> {

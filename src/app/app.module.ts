@@ -12,6 +12,8 @@ import { IncidentsPage } from '../pages/incidents/incidents';
 import { LoginPage } from '../pages/login/login';
 import { OncallPage } from '../pages/oncall/oncall';
 import { OncallUserPage } from '../pages/oncall-user/oncall-user';
+import { OncallMePage } from '../pages/oncall-me/oncall-me';
+import { OncallTeamPage } from '../pages/oncall-team/oncall-team';
 import { FilterModalPage } from '../pages/filter-modal/filter-modal';
 import { ApiUrlPage } from '../pages/api-url/api-url';
 
@@ -37,6 +39,8 @@ import { OncallProvider } from '../providers/oncall/oncall';
     LoginPage,
     OncallPage,
     OncallUserPage,
+    OncallTeamPage,
+    OncallMePage,
     GraphBlockComponent,
     FormatContextPipe,
     FilterModalPage,
@@ -55,6 +59,8 @@ import { OncallProvider } from '../providers/oncall/oncall';
     IncidentsPage,
     IncidentContextPage,
     OncallUserPage,
+    OncallTeamPage,
+    OncallMePage,
     LoginPage,
     OncallPage,
     GraphBlockComponent,

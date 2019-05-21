@@ -14,17 +14,19 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-  <ion-searchbar
+  <ion-toolbar>
+    <ion-searchbar
     placeholder="Search users, teams, or services"
     debounce="300"
     [(ngModel)]="searchTerm"
     (ionChange)="setFilteredItems()"
   ></ion-searchbar>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
 
   <ion-list>
     <ion-item-divider color="light" sticky="true">
@@ -33,7 +35,16 @@
       </ion-label>
     </ion-item-divider>
 
-    <ion-item *ngFor="let team of teams">
+    <ion-item *ngIf="searchTerm.length > 0 && searchTerm.length < 3">
+      Too many results to display...
+    </ion-item>
+
+    <ion-item *ngIf="searchTerm.length > 2 && teams.length < 1">
+      No results found...
+    </ion-item>
+
+    <ion-item *ngFor="let team of teams" (tap)="teamTapped(team)">
+      <ion-icon name="people" slot="start"></ion-icon>
       {{ team.name }}
     </ion-item>
 
@@ -43,8 +54,18 @@
       </ion-label>
     </ion-item-divider>
 
-    <ion-item *ngFor="let service of services">
+    <ion-item *ngIf="searchTerm.length > 0 && searchTerm.length < 3">
+      Too many results to display...
+    </ion-item>
+
+    <ion-item *ngIf="searchTerm.length > 2 && services.length < 1">
+      No results found...
+    </ion-item>
+
+    <ion-item *ngFor="let service of services" (tap)="serviceTapped(service)">
+       <ion-icon name="cog" slot="start"></ion-icon>
       {{ service.name }}
+      
     </ion-item>
 
     <ion-item-divider color="light" sticky="true">
@@ -53,8 +74,22 @@
       </ion-label>
     </ion-item-divider>
 
+    <ion-item *ngIf="searchTerm.length > 0 && searchTerm.length < 3">
+      Too many results to display...
+    </ion-item>
+
+    <ion-item *ngIf="searchTerm.length > 2 && users.length < 1">
+      No results found...
+    </ion-item>
+
+    <ion-item *ngIf="!searchTerm">
+      Type in the searchbox to begin searching.
+    </ion-item>
+
     <ion-item *ngFor="let user of users" (tap)="userTapped(user)">
+      <ion-icon name="person" slot="start"></ion-icon>
       {{ user.username }} - ({{ user.full_name }})
+      
     </ion-item>
 
   </ion-list>

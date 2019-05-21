@@ -5,7 +5,9 @@ import { Storage } from '@ionic/storage';
 import { IncidentsPage } from '../incidents/incidents';
 import { LoginPage } from '../login/login';
 import { OncallUserPage } from '../oncall-user/oncall-user';
+import { OncallTeamPage } from '../oncall-team/oncall-team';
 import { OncallProvider } from '../../providers/oncall/oncall';
+import { IrisProvider} from '../../providers/iris/iris';
 /**
  * Generated class for the OncallPage page.
  *
@@ -24,7 +26,7 @@ export class OncallPage {
   public teams: any;
   public services: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, private storage: Storage, private alertCtrl: AlertController, private oncallProvider: OncallProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, private storage: Storage, private alertCtrl: AlertController, private oncallProvider: OncallProvider, private iris: IrisProvider) {
   }
 
   ionViewDidLoad() {
@@ -72,6 +74,25 @@ export class OncallPage {
     this.navCtrl.push(OncallUserPage, {
       username: tapped_user.username
     });
+  }
+  
+  teamTapped(tapped_team) {
+    this.navCtrl.push(OncallTeamPage, {
+      team_name: tapped_team.name
+    });
+  }
+
+  serviceTapped(service) {
+    this.iris.getOncallService(service.name).subscribe(
+      team =>{
+        this.navCtrl.push(OncallTeamPage, {
+          team_name: team[0]
+        });
+      },
+      (err) => {
+
+      }
+    );
   }
 
   showLogout() {

@@ -1,9 +1,10 @@
-page-oncall-team {
-
+page-oncall-me {
+    
     .dark{
         background-color: #222222;
         padding-top: 2%;
         padding-bottom: 2%;
+        margin-bottom: 4%;
         width: 100%;
         max-width: 100% !important;
         margin-top: 0px;
@@ -12,8 +13,7 @@ page-oncall-team {
         color: white;
         padding-left: 10%;
         padding-right: 10%;
-        padding-bottom: 0px;
-        margin: 4px;
+        margin-top: 0px;
     }
     .card .list .item {
         border-top: 1px solid lightgray;
@@ -22,5 +22,6 @@ page-oncall-team {
     .linkText{
         color: 	#3366BB ;
     }
+
 
 }

@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { IrisProvider, OncallUser} from '../../providers/iris/iris';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
+import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 
 /**
- * Generated class for the OncallUserPage page.
+ * Generated class for the OncallMePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -12,22 +13,20 @@ import { OncallTeamPage } from '../oncall-team/oncall-team';
 
 @IonicPage()
 @Component({
-  selector: 'page-oncall-user',
-  templateUrl: 'oncall-user.html',
+  selector: 'page-oncall-me',
+  templateUrl: 'oncall-me.html',
 })
-
-export class OncallUserPage {
-
+export class OncallMePage {
   user: OncallUser;
   loading: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public iris: IrisProvider, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public iris: IrisProvider, private toastCtrl: ToastController, private irisInfo: IrisInfoProvider) {
   }
 
   ionViewDidLoad() {
     this.loading = true;
     this.user = new OncallUser;
-    this.iris.getOncallUser(this.navParams.get('username')).subscribe(
+    this.iris.getOncallUser(this.irisInfo.username).subscribe(
       (data) => {
         
         

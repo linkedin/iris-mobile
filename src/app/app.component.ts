@@ -3,6 +3,8 @@ import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IncidentsPage } from '../pages/incidents/incidents';
+import { OncallPage } from '../pages/oncall/oncall';
+import { OncallMePage } from '../pages/oncall-me/oncall-me';
 
 
 @Component({
@@ -10,6 +12,8 @@ import { IncidentsPage } from '../pages/incidents/incidents';
 })
 export class MyApp {
   rootPage:any = IncidentsPage;
+  oncallPage:any = OncallPage;
+  mePage:any = OncallMePage;
   @ViewChild(Nav) nav: Nav;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {

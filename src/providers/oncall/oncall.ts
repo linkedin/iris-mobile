@@ -57,7 +57,6 @@ export class OncallProvider {
   }
   filterTeams(searchTerm) {
     if(this.teams.length < 1){return false;}
-    console.log(this.teams);
     return this.teams.filter(item => {
       return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
