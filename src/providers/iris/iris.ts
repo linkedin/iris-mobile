@@ -90,6 +90,7 @@ export class IrisProvider {
   oncallUsers: Array<OncallUser>;
   oncallTeams: Array<OncallTeam>;
   oncallServices: Array<OncallService>;
+  oncallPinnedTeams: Array<string>;
 
   constructor(public http: HttpClient, private storage: Storage, private irisInfo: IrisInfoProvider,
     private iab: InAppBrowser) {
@@ -97,6 +98,7 @@ export class IrisProvider {
       this.oncallUsers = [];
       this.oncallTeams = [];
       this.oncallServices = [];
+      this.oncallPinnedTeams = [];
     }
 
   // Ensures valid refresh token, then renews access key
@@ -213,6 +215,9 @@ export class IrisProvider {
   public clearOncallSerices() {
     this.oncallServices = [];
   }
+  public clearOncallPinnedTeams() {
+    this.oncallPinnedTeams = [];
+  }
 
   // get list of all active oncall users
   public getOncallUsers() : Observable<OncallUser[]> {
@@ -225,6 +230,7 @@ export class IrisProvider {
 
     return returnObservable
       .do(users => {
+        this.clearOncallUsers();
         for (let i of users) {
           this.oncallUsers.push(i);
         }
@@ -257,6 +263,7 @@ export class IrisProvider {
 
     return returnObservable
       .do(teams => {
+        this.clearOncallTeams();
         for (let i of teams) {
           this.oncallTeams.push(i);
         }
@@ -289,6 +296,7 @@ export class IrisProvider {
 
     return returnObservable
       .do(services => {
+        this.clearOncallSerices();
         for (let i of services) {
           this.oncallServices.push(i);
         }
@@ -306,6 +314,22 @@ export class IrisProvider {
 
   }
   
+  public getOncallPinnedTeams(username) : Observable<string[]> {
+    
+    let startObservable = this.renewAccessKey();
+    
+    // Get incidents according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}/pinned_teams`));
+
+    return returnObservable
+    .do(teams => {
+      this.clearOncallPinnedTeams();
+      for (let team of teams) {
+        this.oncallPinnedTeams.push(team);
+      }
+    });
+  }
 
   // Get incident info from filters specified.
   public getIncidents(filters: IncidentFilters) : Observable<Incident[]> {

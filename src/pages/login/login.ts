@@ -1,9 +1,10 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { NavController, NavParams, Platform } from 'ionic-angular';
+import { NavController, NavParams, Platform, App } from 'ionic-angular';
 import { IncidentsPage } from '../incidents/incidents';
 import { Storage } from '@ionic/storage';
 import { IrisProvider } from '../../providers/iris/iris';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
+import { TabsPage } from '../tabs/tabs';
 
 @Component({
   selector: 'page-login',
@@ -16,7 +17,7 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private iris: IrisProvider, private info: IrisInfoProvider,
-    private platform: Platform, private changeDetector: ChangeDetectorRef) {
+    private platform: Platform, private changeDetector: ChangeDetectorRef, private app: App) {
     this.loading = true;
     this.debug = false;
   }
@@ -35,7 +36,11 @@ export class LoginPage {
     ).then(
       () => this.info.init()
     ).then(
-      () => this.navCtrl.setRoot(IncidentsPage)
+      () => {
+              this.app.getRootNav().setRoot(TabsPage);
+              this.navCtrl.setRoot(TabsPage);        
+      }
+  
     )
   }
 
@@ -43,7 +48,10 @@ export class LoginPage {
     let loggedOut = this.navParams.get('loggedOut');
     loggedOut = loggedOut ? loggedOut : false;
     this.iris.renewRefreshKey(loggedOut).subscribe(
-      () => { this.navCtrl.setRoot(IncidentsPage) },
+      () => {
+              this.app.getRootNav().setRoot(TabsPage);
+              this.navCtrl.setRoot(TabsPage);        
+      },
       () => {
         this.loading = false;
         // Need to trigger Angular change detection here to update the page

@@ -2,18 +2,14 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { IncidentsPage } from '../pages/incidents/incidents';
-import { OncallPage } from '../pages/oncall/oncall';
-import { OncallMePage } from '../pages/oncall-me/oncall-me';
+import { TabsPage } from '../pages/tabs/tabs';
 
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = IncidentsPage;
-  oncallPage:any = OncallPage;
-  mePage:any = OncallMePage;
+  rootPage:any = TabsPage;
   @ViewChild(Nav) nav: Nav;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {

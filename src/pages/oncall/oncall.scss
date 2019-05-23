@@ -7,4 +7,21 @@ page-oncall {
         position:absolute;
         margin-bottom: 5%;
     }
+    .textWrap{
+        white-space: normal;
+        word-wrap: break-word;
+    }
+    .toolbar-title {
+        text-overflow: inherit;
+        white-space: normal;
+    }
+    .spinnerCenter {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        display: block;
+        margin: auto;
+        transform: scale(2);
+    }   
 }

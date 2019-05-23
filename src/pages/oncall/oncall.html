@@ -15,20 +15,23 @@
     </ion-buttons>
   </ion-navbar>
   <ion-toolbar>
-    <ion-searchbar
+    <ion-searchbar *ngIf="!usersLoading && !teamsLoading && !servicesLoading"
     placeholder="Search users, teams, or services"
     debounce="300"
     [(ngModel)]="searchTerm"
     (ionChange)="setFilteredItems()"
-  ></ion-searchbar>
+    ></ion-searchbar>
+    <div *ngIf="usersLoading || teamsLoading || servicesLoading" placeholder="Loading">
+      <ion-spinner name="dots"></ion-spinner>
+    </div>
   </ion-toolbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
-  <ion-list>
+  <ion-spinner *ngIf="(usersLoading || teamsLoading || servicesLoading) && pinnedTeamLoading" class="spinnerCenter"></ion-spinner>
+  <ion-list *ngIf="searchTerm.length > 0 || !pinnedTeams && !usersLoading && !teamsLoading && !servicesLoading">
     <ion-item-divider color="light" sticky="true">
       <ion-label>
         Teams
@@ -43,7 +46,7 @@
       No results found...
     </ion-item>
 
-    <ion-item *ngFor="let team of teams" (tap)="teamTapped(team)">
+    <ion-item *ngFor="let team of teams" (tap)="teamTapped(team.name)">
       <ion-icon name="people" slot="start"></ion-icon>
       {{ team.name }}
     </ion-item>
@@ -86,12 +89,32 @@
       Type in the searchbox to begin searching.
     </ion-item>
 
-    <ion-item *ngFor="let user of users" (tap)="userTapped(user)">
+    <ion-item *ngFor="let user of users" (tap)="userTapped(user.username)">
       <ion-icon name="person" slot="start"></ion-icon>
       {{ user.username }} - ({{ user.full_name }})
       
     </ion-item>
 
   </ion-list>
+  <div *ngIf="!pinnedTeamsLoading && pinnedTeams && searchTerm.length == 0">
+    <h1 padding>Pinned teams:</h1>
+    <ion-card *ngFor="let pinnedTeam of pinnedTeams" (tap)="teamTapped(pinnedTeam.name)">
+      <ion-card-header>
+        <div class="textWrap"><ion-title><ion-icon name="flag" item-left padding></ion-icon>{{pinnedTeam.name}}</ion-title></div>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngIf="pinnedTeam.summary.current?.primary">
+          <ion-item *ngFor="let user of pinnedTeam.summary.current.primary">
+              <strong>Primary:</strong> {{user.full_name}}
+              <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
+              <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
+              <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
+              <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+              <ion-icon name="arrow-dropright" item-right></ion-icon>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
 </ion-content>

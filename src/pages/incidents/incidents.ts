@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, MenuController, ActionSheetController, ModalController, AlertController, ItemSliding, Platform } from 'ionic-angular';
+import { NavController, ToastController, MenuController, ActionSheetController, ModalController, AlertController, ItemSliding, Platform, App } from 'ionic-angular';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
@@ -46,7 +46,7 @@ export class IncidentsPage {
     public menu: MenuController, private toastCtrl: ToastController, private storage: Storage,
     private actionCtrl: ActionSheetController, private modalCtrl: ModalController,
     private irisInfo: IrisInfoProvider, private alertCtrl: AlertController,
-    private push: Push, private platform: Platform) {
+    private push: Push, private platform: Platform, private app: App) {
   }
 
   public ionViewWillEnter() {
@@ -59,31 +59,14 @@ export class IncidentsPage {
         return;
       }
       if (!this.irisInfo.username) {
+        // remove tab navigation on logout
+        this.app.getRootNav().setRoot(LoginPage, {loggedOut: true});
         this.navCtrl.setRoot(LoginPage, {loggedOut: false});
         return;
       }
       if (!this.initialized) {
         this.initIncidents();
         this.initPushNotification();
-        this.iris.getOncallUsers().subscribe(
-          () => {},
-          (err) => {
-            this.createToast('Error: failed to fetch oncall users.')
-          },
-          () => {}, // complete handler
-        );
-        this.iris.getOncallTeams().subscribe(
-          () => {},
-          (err) => {
-            this.createToast('Error: failed to fetch oncall teams.')
-          }
-        );
-        this.iris.getOncallServices().subscribe(
-          () => {},
-          (err) => {
-            this.createToast('Error: failed to fetch oncall services.')
-          }
-        );
 
       } else {
         let incidents = Array.from(this.iris.incidents.values());
@@ -322,6 +305,7 @@ export class IncidentsPage {
             let navTransition = alert.dismiss()
             logout().then(() => {
               navTransition.then(() => {
+                this.app.getRootNav().setRoot(LoginPage, {loggedOut: true});
                 this.navCtrl.setRoot(LoginPage, {loggedOut: true});
               })
             })
