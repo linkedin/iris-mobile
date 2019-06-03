@@ -52,7 +52,7 @@ class TokenResponse {
 @Injectable()
 export class IrisProvider {
   dummyRedirect: string = 'http://localhost:7000';
-  apiPath: string = '/api/v0/mobile';
+  apiPath: string = '/api/v0/mobile/iris';
   tokenLeeway: number = 600;
   incidents: Map<number, Incident>;
 
