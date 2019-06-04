@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController, AlertController, ToastController, App } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
+import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
 
 import { LogoutProvider } from '../../providers/logout/logout';
 import { OncallUserPage } from '../oncall-user/oncall-user';
@@ -40,7 +39,7 @@ export class OncallPage {
   loadingError: boolean = false;
 
 
-  constructor(private logOut: LogoutProvider, public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, private storage: Storage, private alertCtrl: AlertController, private iris: IrisProvider, private toastCtrl: ToastController, private app: App, private irisInfo: IrisInfoProvider) {
+  constructor(private logOut: LogoutProvider, public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, private iris: IrisProvider, private toastCtrl: ToastController, private irisInfo: IrisInfoProvider) {
   }
 
   ionViewWillEnter() {
@@ -64,7 +63,7 @@ export class OncallPage {
             }
             this.usersLoading = false;
           },
-          (err) => {
+          () => {
             this.createToast('Error: failed to fetch oncall users.');
             this.loadingError = true;
           },
@@ -81,7 +80,7 @@ export class OncallPage {
         }
         this.teamsLoading = false;
       },
-      (err) => {
+      () => {
         this.createToast('Error: failed to fetch oncall teams.');
         this.loadingError = true;
       }
@@ -97,7 +96,7 @@ export class OncallPage {
         }
         this.servicesLoading = false;
       },
-      (err) => {
+      () => {
         this.createToast('Error: failed to fetch oncall services.');
         this.loadingError = true;
       }
@@ -126,7 +125,7 @@ export class OncallPage {
               this.pinnedTeams.push(new_team);
 
             },
-            (err) => {
+            () => {
               this.createToast('Error: failed to fetch oncall Team.');
               this.loadingError = true;
             }
@@ -135,8 +134,8 @@ export class OncallPage {
           this.pinnedTeamsLoading = false;
         }
       },
-      (err) => {
-        this.createToast('Error: failed to fetch oncall pinned teams.')
+      () => {
+        this.createToast('Error: failed to fetch oncall pinned teams.');
         this.loadingError = true;
       }
     );
@@ -204,8 +203,7 @@ export class OncallPage {
           team_name: team[0]
         });
       },
-      (err) => {
-
+      () => {
       }
     );
   }

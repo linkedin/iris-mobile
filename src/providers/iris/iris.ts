@@ -5,8 +5,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Subject, Observable } from 'rxjs';
 import { IrisInfoProvider } from '../iris_info/iris_info';
 import { forkJoin } from "rxjs/observable/forkJoin";
-import { List } from 'ionic-angular/umd';
-import { ObservableInput } from 'rxjs/Observable';
 
 export class Incident {
   active: boolean;
