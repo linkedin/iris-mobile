@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController, AlertController, ToastController, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { IncidentsPage } from '../incidents/incidents';
-import { LoginPage } from '../login/login';
+import { LogoutProvider } from '../../providers/logout/logout';
 import { OncallUserPage } from '../oncall-user/oncall-user';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
 import { IrisProvider, OncallUser, OncallTeam, OncallService } from '../../providers/iris/iris';
@@ -38,8 +37,10 @@ export class OncallPage {
   public teamsLoading: boolean = true;
   public servicesLoading: boolean = true;
   public pinnedTeamsLoading: boolean = true;
+  loadingError: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, private storage: Storage, private alertCtrl: AlertController, private iris: IrisProvider, private toastCtrl: ToastController, private app: App, private irisInfo: IrisInfoProvider) {
+
+  constructor(private logOut: LogoutProvider, public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, private storage: Storage, private alertCtrl: AlertController, private iris: IrisProvider, private toastCtrl: ToastController, private app: App, private irisInfo: IrisInfoProvider) {
   }
 
   ionViewWillEnter() {
@@ -59,12 +60,13 @@ export class OncallPage {
             this.oncallUsers = this.oncallUsers.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
             this.unfilteredUsers = [];
             for (let i = 0; i < this.oncallUsers.length; i++) {
-              this.unfilteredUsers.push({username: this.oncallUsers[i].name, full_name: this.oncallUsers[i].full_name})
+              this.unfilteredUsers.push({username: this.oncallUsers[i].name, full_name: this.oncallUsers[i].full_name});
             }
             this.usersLoading = false;
           },
           (err) => {
-            this.createToast('Error: failed to fetch oncall users.')
+            this.createToast('Error: failed to fetch oncall users.');
+            this.loadingError = true;
           },
 
         );
@@ -75,12 +77,13 @@ export class OncallPage {
         this.oncallTeams = this.oncallTeams.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
         this.unfilteredTeams = [];
         for (let i = 0; i < this.oncallTeams.length; i++) {
-          this.unfilteredTeams.push({name: this.oncallTeams[i]})
+          this.unfilteredTeams.push({name: this.oncallTeams[i]});
         }
         this.teamsLoading = false;
       },
       (err) => {
-        this.createToast('Error: failed to fetch oncall teams.')
+        this.createToast('Error: failed to fetch oncall teams.');
+        this.loadingError = true;
       }
     );
 
@@ -90,12 +93,13 @@ export class OncallPage {
         this.oncallServices = this.oncallServices.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
         this.unfilteredServices = [];
         for (let i = 0; i < this.oncallServices.length; i++) {
-          this.unfilteredServices.push({name: this.oncallServices[i]})
+          this.unfilteredServices.push({name: this.oncallServices[i]});
         }
         this.servicesLoading = false;
       },
       (err) => {
-        this.createToast('Error: failed to fetch oncall services.')
+        this.createToast('Error: failed to fetch oncall services.');
+        this.loadingError = true;
       }
     );
 
@@ -123,7 +127,8 @@ export class OncallPage {
 
             },
             (err) => {
-              this.createToast('Error: failed to fetch oncall Team.')
+              this.createToast('Error: failed to fetch oncall Team.');
+              this.loadingError = true;
             }
           );
 
@@ -132,10 +137,22 @@ export class OncallPage {
       },
       (err) => {
         this.createToast('Error: failed to fetch oncall pinned teams.')
+        this.loadingError = true;
       }
     );
 
     
+  }
+  
+  refreshPress(){
+    this.loadingError = false;
+    this.servicesLoading = true;
+    this.usersLoading = true;
+    this.teamsLoading = true;
+    this.pinnedTeamsLoading = true;
+    this.initOncallLists();
+    this.initPinnedTems();
+
   }
 
   setFilteredItems() {
@@ -156,17 +173,10 @@ export class OncallPage {
     let actionSheet = this.actionCtrl.create({
       buttons: [
         {
-          text: 'Incidents',
-          handler: () => {
-            this.navCtrl.setRoot(IncidentsPage);
-          },
-          icon: 'aperture'
-        },
-        {
           text: 'Log out',
           cssClass: 'logout-button',
           handler: () => {
-            this.showLogout();
+            this.logOut.showLogout();
           },
           icon: 'exit'
         }
@@ -199,48 +209,6 @@ export class OncallPage {
       }
     );
   }
-
-  showLogout() {
-    // Handle logout action sheet button
-    const logout = () => {
-      return this.storage.ready()
-      .then(() => {
-        Promise.all([
-        this.storage.remove("accessKey"),
-        this.storage.remove("accessExpiry"),
-        this.storage.remove("refreshKey"),
-        this.storage.remove("refreshExpiry"),
-        this.storage.remove("username")])})
-    }
-
-    let alert = this.alertCtrl.create({
-      title: 'Log out',
-      message: 'Log out of Iris?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Log out',
-          handler: () => {
-            // Logic again needed for transitions to work properly.
-            // Dismiss alert, then navigate to login page.
-            let navTransition = alert.dismiss()
-            logout().then(() => {
-              navTransition.then(() => {
-                this.app.getRootNav().setRoot(LoginPage, {loggedOut: true});
-                this.navCtrl.setRoot(LoginPage, {loggedOut: true});
-              })
-            })
-            return false;
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
 
   filterUsers(searchTerm) {
     if(this.unfilteredUsers.length < 1){return false;}

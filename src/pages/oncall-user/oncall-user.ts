@@ -20,13 +20,19 @@ export class OncallUserPage {
 
   user: OncallUser;
   loading: boolean;
+  loadingError: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public iris: IrisProvider, private toastCtrl: ToastController) {
   }
 
-  ionViewDidLoad() {
-    this.loading = true;
+  ionViewWillEnter() {
+    this.getUser();  
+  }
+
+  getUser(){
     this.user = new OncallUser;
+    this.loading = true;
+    this.loadingError = false;
     this.iris.getOncallUser(this.navParams.get('username')).subscribe(
       (data) => {
         
@@ -43,12 +49,12 @@ export class OncallUserPage {
         this.user.upcoming_shifts = data[1];
         this.user.teams = data[2];
 
-        
-        console.log(JSON.stringify(this.user));
         this.loading = false;
       },
       (err) => {
-        this.createToast('Error: failed to fetch oncall USER.')
+        this.loadingError = true;
+        this.loading = false;
+        this.createToast('loadingError: failed to fetch oncall user')
       }
     );
   }

@@ -18,23 +18,20 @@ import { OncallUserPage } from '../oncall-user/oncall-user';
 export class OncallTeamPage {
   team: OncallTeam;
   loading: boolean;
+  loadingError: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public iris: IrisProvider, private toastCtrl: ToastController) {
   }
 
-
-  /* export class OncallTeam {
-    name: string;
-    email: string;
-    slack_channel: string;
-    summary: any;
-    services: string[];
-    rosters: any;
-  } */
   objectKeys = Object.keys;
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
+    this.getTeam();
+  }
+
+  getTeam(){
     this.loading = true;
+    this.loadingError = false;
     this.team = new OncallTeam;
 
     this.iris.getOncallTeam(this.navParams.get('team_name')).subscribe(
@@ -51,11 +48,10 @@ export class OncallTeamPage {
         this.loading = false;
       },
       (err) => {
-        this.createToast('Error: failed to fetch oncall Team.')
+        this.createToast('Error: failed to fetch oncall Team.');
+        this.loadingError = true;
       }
     );
-
-    console.log('ionViewDidLoad OncallTeamPage');
   }
 
   userTapped(tapped_user) {

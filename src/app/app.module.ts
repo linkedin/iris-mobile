@@ -30,6 +30,7 @@ import { IrisInfoProvider } from '../providers/iris_info/iris_info';
 import { Push } from '@ionic-native/push';
 import { FormsModule } from '@angular/forms';
 import { Deeplinks } from '@ionic-native/deeplinks';
+import { LogoutProvider } from '../providers/logout/logout';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { Deeplinks } from '@ionic-native/deeplinks';
     IrisInfoProvider,
     BarcodeScanner,
     Push,
-    Deeplinks
+    Deeplinks,
+    LogoutProvider
   ]
 })
 export class AppModule {}

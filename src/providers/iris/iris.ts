@@ -317,7 +317,7 @@ export class IrisProvider {
   public getOncallPinnedTeams(username) : Observable<string[]> {
     
     let startObservable = this.renewAccessKey();
-    
+
     // Get incidents according to params
     var returnObservable = startObservable
       .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}/pinned_teams`));

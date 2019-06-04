@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
 import { IrisProvider, OncallUser} from '../../providers/iris/iris';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
-
+import { LogoutProvider } from '../../providers/logout/logout';
 /**
  * Generated class for the OncallMePage page.
  *
@@ -19,13 +19,19 @@ import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 export class OncallMePage {
   user: OncallUser;
   loading: boolean;
+  loadingError: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public iris: IrisProvider, private toastCtrl: ToastController, private irisInfo: IrisInfoProvider) {
+  constructor(private logOut: LogoutProvider, public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, public iris: IrisProvider, private toastCtrl: ToastController, private irisInfo: IrisInfoProvider) {
+  }
+  
+  ionViewWillEnter() {
+    this.getUser();  
   }
 
-  ionViewDidLoad() {
-    this.loading = true;
+  getUser(){
     this.user = new OncallUser;
+    this.loading = true;
+    this.loadingError = false;
     this.iris.getOncallUser(this.irisInfo.username).subscribe(
       (data) => {
         
@@ -42,12 +48,12 @@ export class OncallMePage {
         this.user.upcoming_shifts = data[1];
         this.user.teams = data[2];
 
-        
-        console.log(JSON.stringify(this.user));
         this.loading = false;
       },
       (err) => {
-        this.createToast('Error: failed to fetch oncall USER.')
+        this.loadingError = true;
+        this.loading = false;
+        this.createToast('loadingError: failed to fetch oncall user.')
       }
     );
   }
@@ -56,6 +62,23 @@ export class OncallMePage {
     this.navCtrl.push(OncallTeamPage, {
       team_name: tapped_team
     });
+  }
+
+  openActionSheet(){
+    // Open action bar from the upper right ... button
+    let actionSheet = this.actionCtrl.create({
+      buttons: [
+        {
+          text: 'Log out',
+          cssClass: 'logout-button',
+          handler: () => {
+            this.logOut.showLogout();
+          },
+          icon: 'exit'
+        }
+      ]
+    })
+    actionSheet.present()
   }
 
   createToast(message: string) {

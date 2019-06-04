@@ -27,7 +27,7 @@ export class AuthInterceptor implements HttpInterceptor{
     tokenKey = 'accessKey',
     keyIdKey = 'accessKeyId';
     // For token refresh, HMAC with refresh key
-    if (path === '/api/v0/mobile/refresh') {
+    if (path === '/api/v0/mobile/iris/refresh') {
       tokenKey = 'refreshKey';
       keyIdKey = 'refreshKeyId';
     }

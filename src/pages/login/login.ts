@@ -1,6 +1,5 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController, NavParams, Platform, App } from 'ionic-angular';
-import { IncidentsPage } from '../incidents/incidents';
 import { Storage } from '@ionic/storage';
 import { IrisProvider } from '../../providers/iris/iris';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
@@ -75,4 +74,5 @@ export class LoginPage {
       return;
     }
   }
+
 }

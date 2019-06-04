@@ -5,11 +5,11 @@ import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
 import { timer } from 'rxjs/observable/timer';
 
+import { LogoutProvider } from '../../providers/logout/logout';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 import { IrisProvider, Incident, IncidentFilters } from '../../providers/iris/iris';
 import { ApiUrlPage } from '../api-url/api-url';
 import { LoginPage } from '../login/login';
-import { OncallPage } from '../oncall/oncall';
 import { IncidentContextPage } from '../incident-context/incident-context';
 import { FilterModalPage } from '../filter-modal/filter-modal';
 
@@ -42,7 +42,7 @@ export class IncidentsPage {
   initialLimit: number = 30;
   initialized: boolean = false;
 
-  constructor(public navCtrl: NavController, public iris: IrisProvider,
+  constructor(public navCtrl: NavController, public iris: IrisProvider, private logOut: LogoutProvider,
     public menu: MenuController, private toastCtrl: ToastController, private storage: Storage,
     private actionCtrl: ActionSheetController, private modalCtrl: ModalController,
     private irisInfo: IrisInfoProvider, private alertCtrl: AlertController,
@@ -220,17 +220,10 @@ export class IncidentsPage {
           icon: 'custom-claim'
         },
         {
-          text: 'Oncall',
-          handler: () => {
-            this.navCtrl.setRoot(OncallPage);
-          },
-          icon: 'person'
-        },
-        {
           text: 'Log out',
           cssClass: 'logout-button',
           handler: () => {
-            this.showLogout();
+            this.logOut.showLogout();
           },
           icon: 'exit'
         }
@@ -269,47 +262,6 @@ export class IncidentsPage {
               navTransition.then(() => this.createToast('Error: failed to claim incidents.'))
             });
             return false
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
-  showLogout() {
-    // Handle logout action sheet button
-    const logout = () => {
-      return this.storage.ready()
-      .then(() => {
-        Promise.all([
-        this.storage.remove("accessKey"),
-        this.storage.remove("accessExpiry"),
-        this.storage.remove("refreshKey"),
-        this.storage.remove("refreshExpiry"),
-        this.storage.remove("username")])})
-    }
-
-    let alert = this.alertCtrl.create({
-      title: 'Log out',
-      message: 'Log out of Iris?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Log out',
-          handler: () => {
-            // Logic again needed for transitions to work properly.
-            // Dismiss alert, then navigate to login page.
-            let navTransition = alert.dismiss()
-            logout().then(() => {
-              navTransition.then(() => {
-                this.app.getRootNav().setRoot(LoginPage, {loggedOut: true});
-                this.navCtrl.setRoot(LoginPage, {loggedOut: true});
-              })
-            })
-            return false;
           }
         }
       ]

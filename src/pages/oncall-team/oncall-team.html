@@ -180,4 +180,15 @@
 
     
   </div>
+
+  <ion-footer *ngIf="loadingError">
+    <ion-toolbar (click)="getTeam()">
+      <ion-item>Error fetching data, press to reload:
+        <button ion-button outline item-end icon-start>
+          <ion-icon name="sync"></ion-icon>
+          Reload
+        </button>
+      </ion-item>
+    </ion-toolbar>
+  </ion-footer>
 </ion-content>
