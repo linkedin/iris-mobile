@@ -81,8 +81,8 @@ class TokenResponse {
 @Injectable()
 export class IrisProvider {
   dummyRedirect: string = 'http://localhost:7000';
-  apiPath: string = '/api/v0/mobile/iris';
-  oncallApiPath: string = '/api/v0/mobile/oncall';
+  apiPath: string = '/api/v0/mobile';
+  oncallApiPath: string = '/api/v0/oncall';
   tokenLeeway: number = 600;
   incidents: Map<number, Incident>;
   oncallUsers: Array<OncallUser>;
