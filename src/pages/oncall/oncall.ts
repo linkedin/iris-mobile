@@ -13,7 +13,6 @@ import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-oncall',
   templateUrl: 'oncall.html',

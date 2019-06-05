@@ -10,7 +10,6 @@ import { OncallMePage } from '../oncall-me/oncall-me';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-tabs',
   templateUrl: 'tabs.html',

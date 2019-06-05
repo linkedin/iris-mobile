@@ -11,7 +11,6 @@ import { LogoutProvider } from '../../providers/logout/logout';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-oncall-me',
   templateUrl: 'oncall-me.html',

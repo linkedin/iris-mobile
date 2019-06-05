@@ -10,7 +10,6 @@ import { OncallUserPage } from '../oncall-user/oncall-user';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-oncall-team',
   templateUrl: 'oncall-team.html',
