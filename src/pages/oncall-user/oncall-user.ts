@@ -1,14 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { IrisProvider, OncallUser} from '../../providers/iris/iris';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
 
-/**
- * Generated class for the OncallUserPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @Component({
   selector: 'page-oncall-user',

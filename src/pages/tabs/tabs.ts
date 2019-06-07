@@ -3,12 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { IncidentsPage } from '../incidents/incidents';
 import { OncallPage } from '../oncall/oncall';
 import { OncallMePage } from '../oncall-me/oncall-me';
-/**
- * Generated class for the TabsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 
 @Component({
   selector: 'page-tabs',

@@ -1,19 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AlertController, App } from 'ionic-angular';
+import { AlertController, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { LoginPage } from '../../pages/login/login';
 
-/*
-  Generated class for the LogoutProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class LogoutProvider {
 
-  constructor( private storage: Storage, private app: App, private alertCtrl: AlertController) {
-    console.log('Hello LogoutProvider Provider');
+  constructor(public events: Events, private storage: Storage, private alertCtrl: AlertController) {
   }
 
   showLogout() {
@@ -45,8 +38,8 @@ export class LogoutProvider {
             let navTransition = alert.dismiss()
             logout().then(() => {
               navTransition.then(() => {
-                this.app.getRootNav().setRoot(LoginPage, {loggedOut: true});
-                this.app.getActiveNav().setRoot(LoginPage, {loggedOut: true});
+                // publish logout event so app can change root to loginpage
+                this.events.publish('user:logout');
 
               })
             })

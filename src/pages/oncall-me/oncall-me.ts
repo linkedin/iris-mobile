@@ -1,15 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
 import { IrisProvider, OncallUser} from '../../providers/iris/iris';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 import { LogoutProvider } from '../../providers/logout/logout';
-/**
- * Generated class for the OncallMePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @Component({
   selector: 'page-oncall-me',

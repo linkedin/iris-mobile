@@ -222,7 +222,7 @@ export class IrisProvider {
     let params = {},
     startObservable = this.renewAccessKey();
 
-    // Get incidents according to params
+    // Get users according to params
     var returnObservable = startObservable
       .flatMap(() => this.http.get<OncallUser[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users`, { params: new HttpParams({fromObject: params}) }));
 
@@ -255,7 +255,7 @@ export class IrisProvider {
     let params = {},
     startObservable = this.renewAccessKey();
 
-    // Get incidents according to params
+    // Get teams according to params
     var returnObservable = startObservable
       .flatMap(() => this.http.get<OncallTeam[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams`, { params: new HttpParams({fromObject: params}) }));
 
@@ -288,7 +288,7 @@ export class IrisProvider {
     let params = {},
     startObservable = this.renewAccessKey();
 
-    // Get incidents according to params
+    // Get services according to params
     var returnObservable = startObservable
       .flatMap(() => this.http.get<OncallService[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/services`, { params: new HttpParams({fromObject: params}) }));
 
@@ -304,7 +304,7 @@ export class IrisProvider {
   public getOncallService(service) : Observable<string[]> {
     let startObservable = this.renewAccessKey();
 
-    // Get incidents according to params
+    // Get service according to params
     var returnObservable = startObservable
       .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/services/${service}/teams`));
 
@@ -316,7 +316,7 @@ export class IrisProvider {
     
     let startObservable = this.renewAccessKey();
 
-    // Get incidents according to params
+    // Get pinned teams according to params
     var returnObservable = startObservable
       .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}/pinned_teams`));
 

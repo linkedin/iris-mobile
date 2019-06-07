@@ -1,9 +1,8 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { NavController, NavParams, Platform, App } from 'ionic-angular';
+import { NavController, NavParams, Platform, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { IrisProvider } from '../../providers/iris/iris';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
-import { TabsPage } from '../tabs/tabs';
 
 @Component({
   selector: 'page-login',
@@ -14,13 +13,13 @@ export class LoginPage {
   debug: boolean;
   username: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
+  constructor(public events: Events, public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private iris: IrisProvider, private info: IrisInfoProvider,
-    private platform: Platform, private changeDetector: ChangeDetectorRef, private app: App) {
+    private platform: Platform, private changeDetector: ChangeDetectorRef) {
     this.loading = true;
     this.debug = false;
   }
-
+  
   resetCredentials() {
     this.storage.remove('refreshExpiry')
     this.storage.remove('accessExpiry')
@@ -36,8 +35,8 @@ export class LoginPage {
       () => this.info.init()
     ).then(
       () => {
-              this.app.getRootNav().setRoot(TabsPage);
-              this.navCtrl.setRoot(TabsPage);        
+        // emit login event so app.component.ts can change root to tabspage
+        this.events.publish('user:login');       
       }
   
     )
@@ -48,8 +47,8 @@ export class LoginPage {
     loggedOut = loggedOut ? loggedOut : false;
     this.iris.renewRefreshKey(loggedOut).subscribe(
       () => {
-              this.app.getRootNav().setRoot(TabsPage);
-              this.navCtrl.setRoot(TabsPage);        
+              // emit login event so app.component.ts can change root to tabspage
+              this.events.publish('user:login');          
       },
       () => {
         this.loading = false;

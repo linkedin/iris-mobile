@@ -1,14 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { IrisProvider, OncallTeam} from '../../providers/iris/iris';
 import { OncallUserPage } from '../oncall-user/oncall-user';
 
-/**
- * Generated class for the OncallTeamPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @Component({
   selector: 'page-oncall-team',
@@ -43,7 +37,6 @@ export class OncallTeamPage {
         this.team.services = data[0].services;
         this.team.rosters = data[0].rosters;
 
-        console.log(JSON.stringify(this.team));
         this.loading = false;
       },
       (err) => {

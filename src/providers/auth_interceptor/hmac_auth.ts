@@ -11,12 +11,6 @@ import hmacSHA512 from 'crypto-js/hmac-sha512';
 import Base64 from 'crypto-js/enc-base64';
 import { IrisInfoProvider } from '../iris_info/iris_info';
 
-/*
-  Generated class for the IrisProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor{
 
