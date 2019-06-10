@@ -24,6 +24,7 @@ export class LoginPage {
 
     events.subscribe('user:manualLogout', () => {
       this.loggedOut = true;
+      this.events.publish('user:logout');
     });
 
   }
@@ -56,8 +57,6 @@ export class LoginPage {
       () => {
               
               this.loggedOut = false;
-              // prevents redirection to a blank page 
-              this.navCtrl.push(IncidentsPage);
               // emit login event so app.component.ts can change root to tabspage
               this.events.publish('user:login');          
       },
