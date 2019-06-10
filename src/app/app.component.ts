@@ -26,6 +26,11 @@ export class MyApp {
       this.rootPage = LoginPage;
     });
 
+    // navigate to LoginPage and hide tabs set loggedout to true
+    events.subscribe('user:manualLogout', () => {
+      this.rootPage = LoginPage;
+    });
+
     // navigate to tabspage
     events.subscribe('user:login', () => {
       this.rootPage = TabsPage;

@@ -3,6 +3,7 @@ import { NavController, NavParams, Platform, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { IrisProvider } from '../../providers/iris/iris';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
+import { IncidentsPage } from '../incidents/incidents';
 
 @Component({
   selector: 'page-login',
@@ -12,12 +13,19 @@ export class LoginPage {
   loading: boolean;
   debug: boolean;
   username: string;
+  loggedOut: boolean;
 
   constructor(public events: Events, public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage, private iris: IrisProvider, private info: IrisInfoProvider,
     private platform: Platform, private changeDetector: ChangeDetectorRef) {
     this.loading = true;
     this.debug = false;
+    this.loggedOut = true;
+
+    events.subscribe('user:manualLogout', () => {
+      this.loggedOut = true;
+    });
+
   }
   
   resetCredentials() {
@@ -36,6 +44,7 @@ export class LoginPage {
     ).then(
       () => {
         // emit login event so app.component.ts can change root to tabspage
+        this.loggedOut = false;
         this.events.publish('user:login');       
       }
   
@@ -43,10 +52,12 @@ export class LoginPage {
   }
 
   showSSO() {
-    let loggedOut = this.navParams.get('loggedOut');
-    loggedOut = loggedOut ? loggedOut : false;
-    this.iris.renewRefreshKey(loggedOut).subscribe(
+    this.iris.renewRefreshKey(this.loggedOut).subscribe(
       () => {
+              
+              this.loggedOut = false;
+              // prevents redirection to a blank page 
+              this.navCtrl.push(IncidentsPage);
               // emit login event so app.component.ts can change root to tabspage
               this.events.publish('user:login');          
       },

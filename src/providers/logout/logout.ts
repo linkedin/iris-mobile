@@ -39,7 +39,7 @@ export class LogoutProvider {
             logout().then(() => {
               navTransition.then(() => {
                 // publish logout event so app can change root to loginpage
-                this.events.publish('user:logout');
+                this.events.publish('user:manualLogout');
 
               })
             })

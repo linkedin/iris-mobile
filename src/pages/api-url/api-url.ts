@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { LoginPage } from '../login/login';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController, Events } from 'ionic-angular';
 
 
 /**
@@ -21,7 +20,7 @@ export class ApiUrlPage {
   barcodeScannerOptions: BarcodeScannerOptions;
   loading: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage,
+  constructor(public events: Events, public navCtrl: NavController, public navParams: NavParams, private storage: Storage,
     private barcodeScanner: BarcodeScanner, private toastCtrl: ToastController, private info: IrisInfoProvider) {
     this.barcodeScannerOptions = {
       showTorchButton: true,
@@ -45,7 +44,7 @@ export class ApiUrlPage {
       this.storage.ready().then(() => {
         this.info.setBaseUrl(this.baseUrl);
         this.info.setLoginUrl(this.loginUrl);
-        this.navCtrl.setRoot(LoginPage);
+        this.events.publish('user:logout');
       })
     }
     else {
@@ -64,7 +63,7 @@ export class ApiUrlPage {
     this.storage.ready().then(() => {
       this.storage.get('baseUrl').then(data => {
         if (data) {
-          this.navCtrl.setRoot(LoginPage);
+          this.events.publish('user:logout');
         } else {
           this.loading = false;
         }

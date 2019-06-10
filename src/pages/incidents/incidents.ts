@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, MenuController, ActionSheetController, ModalController, AlertController, ItemSliding, Platform, App } from 'ionic-angular';
+import { NavController, ToastController, MenuController, ActionSheetController, ModalController, AlertController, ItemSliding, Platform, Events } from 'ionic-angular';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
@@ -9,7 +9,6 @@ import { LogoutProvider } from '../../providers/logout/logout';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 import { IrisProvider, Incident, IncidentFilters } from '../../providers/iris/iris';
 import { ApiUrlPage } from '../api-url/api-url';
-import { LoginPage } from '../login/login';
 import { IncidentContextPage } from '../incident-context/incident-context';
 import { FilterModalPage } from '../filter-modal/filter-modal';
 
@@ -42,11 +41,11 @@ export class IncidentsPage {
   initialLimit: number = 30;
   initialized: boolean = false;
 
-  constructor(public navCtrl: NavController, public iris: IrisProvider, private logOut: LogoutProvider,
+  constructor(public events: Events, public navCtrl: NavController, public iris: IrisProvider, private logOut: LogoutProvider,
     public menu: MenuController, private toastCtrl: ToastController, private storage: Storage,
     private actionCtrl: ActionSheetController, private modalCtrl: ModalController,
     private irisInfo: IrisInfoProvider, private alertCtrl: AlertController,
-    private push: Push, private platform: Platform, private app: App) {
+    private push: Push, private platform: Platform) {
   }
 
   public ionViewWillEnter() {
@@ -60,8 +59,7 @@ export class IncidentsPage {
       }
       if (!this.irisInfo.username) {
         // remove tab navigation on logout
-        this.app.getRootNav().setRoot(LoginPage, {loggedOut: true});
-        this.navCtrl.setRoot(LoginPage, {loggedOut: false});
+        this.events.publish('user:logout');
         return;
       }
       if (!this.initialized) {
