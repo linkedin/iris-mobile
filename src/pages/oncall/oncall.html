@@ -40,9 +40,9 @@
       No results found...
     </ion-item>
 
-    <ion-item *ngFor="let team of teams" (tap)="teamTapped(team.name)">
+    <ion-item *ngFor="let team of teams" (tap)="teamTapped(team)">
       <ion-icon name="people" slot="start"></ion-icon>
-      {{ team.name }}
+      {{ team }}
     </ion-item>
 
     <ion-item-divider color="light">

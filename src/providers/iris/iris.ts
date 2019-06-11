@@ -86,9 +86,10 @@ export class IrisProvider {
   tokenLeeway: number = 600;
   incidents: Map<number, Incident>;
   oncallUsers: Array<OncallUser>;
-  oncallTeams: Array<OncallTeam>;
+  oncallTeams: Array<string>;
   oncallServices: Array<OncallService>;
   oncallPinnedTeams: Array<string>;
+  oncallUsersLoaded: boolean = false;
 
   constructor(public http: HttpClient, private storage: Storage, private irisInfo: IrisInfoProvider,
     private iab: InAppBrowser) {
@@ -97,6 +98,7 @@ export class IrisProvider {
       this.oncallTeams = [];
       this.oncallServices = [];
       this.oncallPinnedTeams = [];
+      this.loadOncallUserCache();
     }
 
   // Ensures valid refresh token, then renews access key
@@ -224,7 +226,7 @@ export class IrisProvider {
 
     // Get users according to params
     var returnObservable = startObservable
-      .flatMap(() => this.http.get<OncallUser[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users`, { params: new HttpParams({fromObject: params}) }));
+      .flatMap(() => this.http.get<OncallUser[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users?fields=name&fields=full_name`, { params: new HttpParams({fromObject: params}) }));
 
     return returnObservable
       .do(users => {
@@ -232,6 +234,9 @@ export class IrisProvider {
         for (let i of users) {
           this.oncallUsers.push(i);
         }
+        this.oncallUsersLoaded = true;
+        this.refreshOncallUserCache();
+
       });
   }
 
@@ -250,14 +255,39 @@ export class IrisProvider {
     return returnObservable;
   }
 
+  // encode user array as string to persist in local storage
+  public refreshOncallUserCache(){
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.set('oncallUserArray', JSON.stringify(this.oncallUsers));
+    })
+
+  }
+
+  // if there is a cached copy of the oncall user array load it
+  public loadOncallUserCache(){
+    this.oncallUsersLoaded = false;
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.get('oncallUserArray').then((val) => {
+        if(val){
+          this.oncallUsers = JSON.parse(val);
+          this.oncallUsersLoaded = true;
+        }
+      });
+    })
+  }
+
   // get list of all active oncall teams
-  public getOncallTeams() : Observable<OncallTeam[]> {
+  public getOncallTeams() : Observable<string[]> {
     let params = {},
     startObservable = this.renewAccessKey();
 
     // Get teams according to params
     var returnObservable = startObservable
-      .flatMap(() => this.http.get<OncallTeam[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams`, { params: new HttpParams({fromObject: params}) }));
+      .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams?fields=name`, { params: new HttpParams({fromObject: params}) }));
 
     return returnObservable
       .do(teams => {

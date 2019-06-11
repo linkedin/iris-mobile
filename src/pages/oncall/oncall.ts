@@ -15,7 +15,7 @@ import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 export class OncallPage {
   public searchTerm: string = "";
   public users: any = [];
-  public teams: any = [];
+  public teams: Array<string> = [];
   public services: any = [];
   public pinnedTeams: OncallTeam[];
 
@@ -23,7 +23,7 @@ export class OncallPage {
   unfilteredTeams: any = [];
   unfilteredServices: any = [];
   oncallUsers: Array<OncallUser> = [];
-  oncallTeams: Array<OncallTeam> = [];
+  oncallTeams: Array<string> = [];
   oncallServices: Array<OncallService> = [];
 
   public usersLoading: boolean = true;
@@ -46,31 +46,41 @@ export class OncallPage {
 
   initOncallLists(){
     
-    this.iris.clearOncallUsers;
-        this.iris.getOncallUsers().subscribe(
-          () => {
-            this.oncallUsers = this.iris.oncallUsers;
-            this.oncallUsers = this.oncallUsers.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
-            this.unfilteredUsers = [];
-            for (let i = 0; i < this.oncallUsers.length; i++) {
-              this.unfilteredUsers.push({username: this.oncallUsers[i].name, full_name: this.oncallUsers[i].full_name});
-            }
-            this.usersLoading = false;
-          },
-          () => {
-            this.createToast('Error: failed to fetch oncall users.');
-            this.loadingError = true;
-          },
+    // if users are saved in storage initialize list with that data while we wait from response from server
+    if(this.iris.oncallUsersLoaded){
+      this.oncallUsers = this.iris.oncallUsers;
+      this.oncallUsers = this.oncallUsers.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
+      this.unfilteredUsers = [];
+      for (let i = 0; i < this.oncallUsers.length; i++) {
+        this.unfilteredUsers.push({username: this.oncallUsers[i].name, full_name: this.oncallUsers[i].full_name});
+      }
+      this.usersLoading = false;
+    }
 
-        );
+    this.iris.getOncallUsers().subscribe(
+      () => {
+        this.oncallUsers = this.iris.oncallUsers;
+        this.oncallUsers = this.oncallUsers.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
+        this.unfilteredUsers = [];
+        for (let i = 0; i < this.oncallUsers.length; i++) {
+          this.unfilteredUsers.push({username: this.oncallUsers[i].name, full_name: this.oncallUsers[i].full_name});
+        }
+        this.usersLoading = false;
+      },
+      () => {
+        this.createToast('Error: failed to fetch oncall users.');
+        this.loadingError = true;
+      },
+
+    );
 
     this.iris.getOncallTeams().subscribe(
       () => {
         this.oncallTeams = this.iris.oncallTeams;
-        this.oncallTeams = this.oncallTeams.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
+        this.oncallTeams = this.oncallTeams.sort((a, b) => {if(b > a){return -1;}else{return 1;}})
         this.unfilteredTeams = [];
         for (let i = 0; i < this.oncallTeams.length; i++) {
-          this.unfilteredTeams.push({name: this.oncallTeams[i]});
+          this.unfilteredTeams.push(this.oncallTeams[i]);
         }
         this.teamsLoading = false;
       },
@@ -213,7 +223,7 @@ export class OncallPage {
   filterTeams(searchTerm) {
     if(this.unfilteredTeams.length < 1){return false;}
     return this.unfilteredTeams.filter(item => {
-      return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+      return item.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
   }
   filterServices(searchTerm) {
