@@ -4,7 +4,7 @@ import { NavController, NavParams, ActionSheetController, ToastController } from
 import { LogoutProvider } from '../../providers/logout/logout';
 import { OncallUserPage } from '../oncall-user/oncall-user';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
-import { IrisProvider, OncallUser, OncallTeam, OncallService } from '../../providers/iris/iris';
+import { IrisProvider, OncallUser, OncallTeam } from '../../providers/iris/iris';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 
 
@@ -15,16 +15,13 @@ import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 export class OncallPage {
   public searchTerm: string = "";
   public users: any = [];
-  public teams: Array<string> = [];
+  public teams: any = [];
   public services: any = [];
   public pinnedTeams: OncallTeam[];
 
-  unfilteredUsers: any = [];
-  unfilteredTeams: any = [];
-  unfilteredServices: any = [];
-  oncallUsers: Array<OncallUser> = [];
-  oncallTeams: Array<string> = [];
-  oncallServices: Array<OncallService> = [];
+  unfilteredUsers: Array<OncallUser> = [];
+  unfilteredTeams: Array<string> = [];
+  unfilteredServices: Array<string> = [];
 
   public usersLoading: boolean = true;
   public teamsLoading: boolean = true;
@@ -46,25 +43,27 @@ export class OncallPage {
 
   initOncallLists(){
     
-    // if users are saved in storage initialize list with that data while we wait from response from server
+    // if users were saved in storage initialize list with that data while we wait from response from server
     if(this.iris.oncallUsersLoaded){
-      this.oncallUsers = this.iris.oncallUsers;
-      this.oncallUsers = this.oncallUsers.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
-      this.unfilteredUsers = [];
-      for (let i = 0; i < this.oncallUsers.length; i++) {
-        this.unfilteredUsers.push({username: this.oncallUsers[i].name, full_name: this.oncallUsers[i].full_name});
-      }
+      this.unfilteredUsers = this.iris.oncallUsers;
       this.usersLoading = false;
     }
 
+    // if teams were saved in storage initialize list with that data while we wait from response from server
+    if(this.iris.oncallTeamsLoaded){
+      this.unfilteredTeams = this.iris.oncallTeams;
+      this.teamsLoading = false;
+    }
+
+    // if services were saved in storage initialize list with that data while we wait from response from server
+    if(this.iris.oncallServicesLoaded){
+      this.unfilteredServices = this.iris.oncallServices;
+      this.servicesLoading = false;
+    }
+
     this.iris.getOncallUsers().subscribe(
-      () => {
-        this.oncallUsers = this.iris.oncallUsers;
-        this.oncallUsers = this.oncallUsers.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
-        this.unfilteredUsers = [];
-        for (let i = 0; i < this.oncallUsers.length; i++) {
-          this.unfilteredUsers.push({username: this.oncallUsers[i].name, full_name: this.oncallUsers[i].full_name});
-        }
+      (users) => {
+        this.unfilteredUsers = users.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}});
         this.usersLoading = false;
       },
       () => {
@@ -75,13 +74,8 @@ export class OncallPage {
     );
 
     this.iris.getOncallTeams().subscribe(
-      () => {
-        this.oncallTeams = this.iris.oncallTeams;
-        this.oncallTeams = this.oncallTeams.sort((a, b) => {if(b > a){return -1;}else{return 1;}})
-        this.unfilteredTeams = [];
-        for (let i = 0; i < this.oncallTeams.length; i++) {
-          this.unfilteredTeams.push(this.oncallTeams[i]);
-        }
+      (teams) => {
+        this.unfilteredTeams = teams.sort();
         this.teamsLoading = false;
       },
       () => {
@@ -91,13 +85,8 @@ export class OncallPage {
     );
 
     this.iris.getOncallServices().subscribe(
-      () => {
-        this.oncallServices = this.iris.oncallServices;
-        this.oncallServices = this.oncallServices.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}})
-        this.unfilteredServices = [];
-        for (let i = 0; i < this.oncallServices.length; i++) {
-          this.unfilteredServices.push({name: this.oncallServices[i]});
-        }
+      (services) => {
+        this.unfilteredServices = services.sort();
         this.servicesLoading = false;
       },
       () => {
@@ -190,7 +179,7 @@ export class OncallPage {
 
   userTapped(tapped_user) {
     this.navCtrl.push(OncallUserPage, {
-      username: tapped_user
+      name: tapped_user
     });
   }
   
@@ -201,7 +190,7 @@ export class OncallPage {
   }
 
   serviceTapped(service) {
-    this.iris.getOncallService(service.name).subscribe(
+    this.iris.getOncallService(service).subscribe(
       team =>{
         this.navCtrl.push(OncallTeamPage, {
           team_name: team[0]
@@ -215,7 +204,7 @@ export class OncallPage {
   filterUsers(searchTerm) {
     if(this.unfilteredUsers.length < 1){return false;}
     return this.unfilteredUsers.filter(item => {
-      if(item.username.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1){return true;}
+      if(item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1){return true;}
       if(item.full_name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1){return true;}
       return false;
     });
@@ -229,7 +218,7 @@ export class OncallPage {
   filterServices(searchTerm) {
     if(this.unfilteredServices.length < 1){return false;}
     return this.unfilteredServices.filter(item => {
-      return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+      return item.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
   }
 

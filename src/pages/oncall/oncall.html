@@ -25,7 +25,7 @@
 
 <ion-content padding>
   <ion-spinner *ngIf="(usersLoading || teamsLoading || servicesLoading) && pinnedTeamLoading" class="spinnerCenter"></ion-spinner>
-  <ion-list *ngIf="searchTerm.length > 0 || !pinnedTeams && !usersLoading && !teamsLoading && !servicesLoading">
+  <ion-list *ngIf="searchTerm.length > 0 || (pinnedTeams?.length < 1 && (!usersLoading && !teamsLoading && !servicesLoading))">
     <ion-item-divider color="light">
       <ion-label>
         Teams
@@ -61,7 +61,7 @@
 
     <ion-item *ngFor="let service of services" (tap)="serviceTapped(service)">
        <ion-icon name="cog" slot="start"></ion-icon>
-      {{ service.name }}
+      {{ service }}
       
     </ion-item>
 
@@ -83,9 +83,9 @@
       Type in the searchbox to begin searching.
     </ion-item>
 
-    <ion-item *ngFor="let user of users" (tap)="userTapped(user.username)">
+    <ion-item *ngFor="let user of users" (tap)="userTapped(user.name)">
       <ion-icon name="person" slot="start"></ion-icon>
-      {{ user.username }} - ({{ user.full_name }})
+      {{ user.name }} - ({{ user.full_name }})
       
     </ion-item>
 

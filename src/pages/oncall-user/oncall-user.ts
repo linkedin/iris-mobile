@@ -26,7 +26,7 @@ export class OncallUserPage {
     this.user = new OncallUser;
     this.loading = true;
     this.loadingError = false;
-    this.iris.getOncallUser(this.navParams.get('username')).subscribe(
+    this.iris.getOncallUser(this.navParams.get('name')).subscribe(
       (data) => {
         
         

@@ -65,6 +65,7 @@ export class IncidentsPage {
       if (!this.initialized) {
         this.initIncidents();
         this.initPushNotification();
+        this.iris.initOncallCache();
 
       } else {
         let incidents = Array.from(this.iris.incidents.values());

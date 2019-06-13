@@ -42,12 +42,6 @@ export class OncallTeam {
   rosters: any;
 }
 
-export class OncallService {
-  name: string;
-  team: string;
-}
-
-
 export class GraphData {
   current: string;
   original: string;
@@ -87,9 +81,11 @@ export class IrisProvider {
   incidents: Map<number, Incident>;
   oncallUsers: Array<OncallUser>;
   oncallTeams: Array<string>;
-  oncallServices: Array<OncallService>;
+  oncallServices: Array<string>;
   oncallPinnedTeams: Array<string>;
   oncallUsersLoaded: boolean = false;
+  oncallTeamsLoaded: boolean = false;
+  oncallServicesLoaded: boolean = false;
 
   constructor(public http: HttpClient, private storage: Storage, private irisInfo: IrisInfoProvider,
     private iab: InAppBrowser) {
@@ -98,8 +94,14 @@ export class IrisProvider {
       this.oncallTeams = [];
       this.oncallServices = [];
       this.oncallPinnedTeams = [];
-      this.loadOncallUserCache();
+
     }
+  
+  public initOncallCache() { 
+    this.loadOncallUserCache();
+    this.loadOncallTeamCache();
+    this.loadOncallServiceCache();
+  }
 
   // Ensures valid refresh token, then renews access key
   public renewAccessKey() : Observable<void> {
@@ -230,11 +232,7 @@ export class IrisProvider {
 
     return returnObservable
       .do(users => {
-        this.clearOncallUsers();
-        for (let i of users) {
-          this.oncallUsers.push(i);
-        }
-        this.oncallUsersLoaded = true;
+        this.oncallUsers = users.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}});
         this.refreshOncallUserCache();
 
       });
@@ -291,10 +289,8 @@ export class IrisProvider {
 
     return returnObservable
       .do(teams => {
-        this.clearOncallTeams();
-        for (let i of teams) {
-          this.oncallTeams.push(i);
-        }
+        this.oncallTeams = teams.sort();
+        this.refreshOncallTeamCache();
       });
 
   }
@@ -312,22 +308,45 @@ export class IrisProvider {
   
       return returnObservable;
     }
+  
+  // encode team array as string to persist in local storage
+  public refreshOncallTeamCache(){
 
-  // get list of all active oncall users
-  public getOncallServices() : Observable<OncallService[]> {
+    this.storage.ready()
+    .then(() => {
+      this.storage.set('oncallTeamArray', JSON.stringify(this.oncallTeams));
+    })
+
+  }
+
+  // if there is a cached copy of the oncall team array load it
+  public loadOncallTeamCache(){
+    this.oncallTeamsLoaded = false;
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.get('oncallTeamArray').then((val) => {
+        if(val){
+          this.oncallTeams = JSON.parse(val);
+          this.oncallTeamsLoaded = true;
+        }
+      });
+    })
+  }
+
+  // get list of all active oncall services
+  public getOncallServices() : Observable<string[]> {
     let params = {},
     startObservable = this.renewAccessKey();
 
     // Get services according to params
     var returnObservable = startObservable
-      .flatMap(() => this.http.get<OncallService[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/services`, { params: new HttpParams({fromObject: params}) }));
+      .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/services`, { params: new HttpParams({fromObject: params}) }));
 
     return returnObservable
       .do(services => {
-        this.clearOncallSerices();
-        for (let i of services) {
-          this.oncallServices.push(i);
-        }
+        this.oncallServices = services.sort();
+        this.refreshOncallServiceCache();
       });
   }
 
@@ -341,6 +360,33 @@ export class IrisProvider {
     return returnObservable;
 
   }
+
+
+  // encode service array as string to persist in local storage
+  public refreshOncallServiceCache(){
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.set('oncallServiceArray', JSON.stringify(this.oncallServices));
+    })
+
+  }
+
+  // if there is a cached copy of the oncall service array load it
+  public loadOncallServiceCache(){
+    this.oncallServicesLoaded = false;
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.get('oncallServiceArray').then((val) => {
+        if(val){
+          this.oncallServices = JSON.parse(val);
+          this.oncallServicesLoaded = true;
+        }
+      });
+    })
+  }
+
   
   public getOncallPinnedTeams(username) : Observable<string[]> {
     
