@@ -37,8 +37,7 @@ export class OncallPage {
     // pinned teams display on call now data so make sure they are up to date every time
     this.pinnedTeamsLoading = true;
     this.initOncallLists();
-    this.initPinnedTems();
-
+    this.initPinnedTeams();
   }
 
   initOncallLists(){
@@ -63,7 +62,7 @@ export class OncallPage {
 
     this.iris.getOncallUsers().subscribe(
       (users) => {
-        this.unfilteredUsers = users.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}});
+        this.unfilteredUsers = users;
         this.usersLoading = false;
       },
       () => {
@@ -75,7 +74,7 @@ export class OncallPage {
 
     this.iris.getOncallTeams().subscribe(
       (teams) => {
-        this.unfilteredTeams = teams.sort();
+        this.unfilteredTeams = teams;
         this.teamsLoading = false;
       },
       () => {
@@ -86,7 +85,7 @@ export class OncallPage {
 
     this.iris.getOncallServices().subscribe(
       (services) => {
-        this.unfilteredServices = services.sort();
+        this.unfilteredServices = services;
         this.servicesLoading = false;
       },
       () => {
@@ -97,26 +96,16 @@ export class OncallPage {
 
   }
 
-  initPinnedTems(){
+  initPinnedTeams(){
 
     this.iris.getOncallPinnedTeams(this.irisInfo.username).subscribe(
-      () => {
+      (teams_data) => {
         // fire off calls for pinned teams and render them 
         this.pinnedTeams = [];
-        for(let pinned_team of this.iris.oncallPinnedTeams){
-          let new_team = new OncallTeam;
-        
+        for(let pinned_team of teams_data){
           this.iris.getOncallTeam(pinned_team).subscribe(
-            (data) => {
-              
-              new_team.name = data[0].name;
-              new_team.email = data[0].email;
-              new_team.slack_channel = data[0].slack_channel;
-              new_team.summary = data[1];
-              new_team.services = data[0].services;
-              new_team.rosters = data[0].rosters;
-              this.pinnedTeams.push(new_team);
-
+            (team_data) => {      
+              this.pinnedTeams.push(team_data);
             },
             () => {
               this.createToast('Error: failed to fetch oncall Team.');
@@ -132,8 +121,6 @@ export class OncallPage {
         this.loadingError = true;
       }
     );
-
-    
   }
   
   refreshPress(){
@@ -143,7 +130,7 @@ export class OncallPage {
     this.teamsLoading = true;
     this.pinnedTeamsLoading = true;
     this.initOncallLists();
-    this.initPinnedTems();
+    this.initPinnedTeams();
 
   }
 

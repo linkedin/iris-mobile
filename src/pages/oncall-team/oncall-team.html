@@ -24,50 +24,18 @@
       </ion-card-header>
       <ion-card-content>
         <ion-list>
-          <div *ngIf="team.summary.current?.primary">
-            <ion-item *ngFor="let user of team.summary.current.primary" (tap)="userTapped(user.user)">
-                <strong>Primary:</strong> {{user.full_name}}
-                <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
-                <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
-                <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
-                <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-                <ion-icon name="arrow-dropright" item-right></ion-icon>
-            </ion-item>
+          <div *ngFor="let role of ['primary', 'secondary', 'manager', 'shadow']">
+            <div *ngIf="team.summary?.current[role]">
+              <ion-item *ngFor="let user of team.summary.current[role]" (tap)="userTapped(user.user)">
+                  <strong>{{ role }}:</strong> {{user.full_name}}
+                  <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
+                  <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
+                  <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
+                  <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+                  <ion-icon name="arrow-dropright" item-right></ion-icon>
+              </ion-item>
+            </div>
           </div>
-
-          <div *ngIf="team.summary.current?.secondary">
-            <ion-item *ngFor="let user of team.summary.current.secondary" (tap)="userTapped(user.user)">
-                <strong>Primary:</strong> {{user.full_name}}
-                <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
-                <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
-                <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
-                <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-                <ion-icon name="arrow-dropright" item-right></ion-icon>
-            </ion-item>
-          </div>
-
-          <div *ngIf="team.summary.current?.manager">
-            <ion-item *ngFor="let user of team.summary.current.manager" (tap)="userTapped(user.user)">
-                <strong>Manager:</strong> {{user.full_name}}
-                <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
-                <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
-                <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
-                <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-                <ion-icon name="arrow-dropright" item-right></ion-icon>
-            </ion-item>
-          </div>
-
-          <div *ngIf="team.summary.current?.shadow">
-            <ion-item *ngFor="let user of team.summary.current.shadow" (tap)="userTapped(user.user)">
-                <strong>shadow:</strong> {{user.full_name}}
-                <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
-                <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
-                <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
-                <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-                <ion-icon name="arrow-dropright" item-right></ion-icon>
-            </ion-item>
-          </div>
-
         </ion-list>
       </ion-card-content>
     </ion-card>
@@ -78,69 +46,35 @@
       </ion-card-header>
       <ion-card-content>
         <ion-list>
-          <div *ngIf="team.summary.next?.primary">
-            <ion-item *ngFor="let user of team.summary.next.primary" (tap)="userTapped(user.user)">
-                <strong>Primary:</strong> {{user.full_name}}
-                <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
-                <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
-                <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
-                <p>Shift starts: {{user.start * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-                <ion-icon name="arrow-dropright" item-right></ion-icon>
-            </ion-item>
-          </div>
-
-          <div *ngIf="team.summary.next?.secondary">
-            <ion-item *ngFor="let user of team.summary.next.secondary" (tap)="userTapped(user.user)">
-                <strong>Primary:</strong> {{user.full_name}}
-                <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
-                <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
-                <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
-                <p>Shift starts: {{user.start * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-                <ion-icon name="arrow-dropright" item-right></ion-icon>
-            </ion-item>
-          </div>
-
-          <div *ngIf="team.summary.next?.manager">
-            <ion-item *ngFor="let user of team.summary.next.manager" (tap)="userTapped(user.user)">
-                <strong>Manager:</strong> {{user.full_name}}
-                <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
-                <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
-                <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
-                <p>Shift starts: {{user.start * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-                <ion-icon name="arrow-dropright" item-right></ion-icon>
-            </ion-item>
-          </div>
-
-          <div *ngIf="team.summary.next?.shadow">
-            <ion-item *ngFor="let user of team.summary.next.shadow" (tap)="userTapped(user.user)">
-                <strong>shadow:</strong> {{user.full_name}}
-                <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
-                <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
-                <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
-                <p>Shift starts: {{user.start * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-                <ion-icon name="arrow-dropright" item-right></ion-icon>
-            </ion-item>
+          <div *ngFor="let role of ['primary', 'secondary', 'manager', 'shadow']">
+            <div *ngIf="team.summary?.next[role]">
+              <ion-item *ngFor="let user of team.summary.next[role]" (tap)="userTapped(user.user)">
+                  <strong>{{ role }}:</strong> {{user.full_name}}
+                  <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
+                  <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
+                  <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
+                  <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+                  <ion-icon name="arrow-dropright" item-right></ion-icon>
+              </ion-item>
+            </div>
           </div>
         </ion-list>
       </ion-card-content>
     </ion-card>
 
-    <ion-card *ngIf="team?.summary?.current?.vacation">
+    <ion-card *ngIf="team?.summary?.current?.vacation || team?.summary?.current?.unavailable">
       <ion-card-header>
         <ion-card-title>Unavailable Now</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-list>
-          <ion-item *ngFor="let user of team.summary.current.unavailable" (tap)="userTapped(user.user)">
-              <strong>Unavailable:</strong> {{user.full_name}}
-              <p>Unavailable until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-              <ion-icon name="arrow-dropright" item-right></ion-icon>
-          </ion-item>
-          <ion-item *ngFor="let user of team.summary.current.vacation" (tap)="userTapped(user.user)">
-              <strong>Vacation:</strong> {{user.full_name}}
-              <p>Unavailable until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-              <ion-icon name="arrow-dropright" item-right></ion-icon>
-          </ion-item>
+          <div *ngFor="let role of ['unavailable', 'vacation']">
+            <ion-item *ngFor="let user of team.summary?.current[role]" (tap)="userTapped(user.user)">
+                <strong>{{ role }}:</strong> {{user.full_name}}
+                <p>Unavailable until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+                <ion-icon name="arrow-dropright" item-right></ion-icon>
+            </ion-item>
+          </div>
         </ion-list>
       </ion-card-content>
     </ion-card>

@@ -28,26 +28,14 @@ export class OncallUserPage {
     this.loadingError = false;
     this.iris.getOncallUser(this.navParams.get('name')).subscribe(
       (data) => {
-        
-        
         // populate user with data from api call
-        this.user.id = data[0].id;
-        this.user.name = data[0].name;
-        this.user.full_name = data[0].full_name;
-        this.user.time_zone = data[0].time_zone;
-        this.user.photo_url = data[0].photo_url;
-        this.user.active = data[0].active;
-        this.user.god = data[0].god;
-        this.user.contacts = data[0].contacts;
-        this.user.upcoming_shifts = data[1];
-        this.user.teams = data[2];
-
+        this.user = data;
         this.loading = false;
       },
       (err) => {
         this.loadingError = true;
         this.loading = false;
-        this.createToast('loadingError: failed to fetch oncall user')
+        this.createToast('loadingError: failed to fetch oncall user.')
       }
     );
   }

@@ -38,6 +38,7 @@
               <span *ngIf="user.contacts?.sms">
               <strong>SMS:</strong> {{ user.contacts.sms }}
               </span>
+              <p *ngIf="!user.contacts"> You have no contacts defined! You can add some by visiting the user settings page in the desktop version of Oncall.</p> 
           </ion-list>
       </ion-card-content>
     </ion-card>

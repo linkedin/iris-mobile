@@ -82,7 +82,6 @@ export class IrisProvider {
   oncallUsers: Array<OncallUser>;
   oncallTeams: Array<string>;
   oncallServices: Array<string>;
-  oncallPinnedTeams: Array<string>;
   oncallUsersLoaded: boolean = false;
   oncallTeamsLoaded: boolean = false;
   oncallServicesLoaded: boolean = false;
@@ -93,7 +92,6 @@ export class IrisProvider {
       this.oncallUsers = [];
       this.oncallTeams = [];
       this.oncallServices = [];
-      this.oncallPinnedTeams = [];
 
     }
   
@@ -208,18 +206,6 @@ export class IrisProvider {
   public clearIncidents() {
     this.incidents.clear();
   }
-  public clearOncallUsers() {
-    this.oncallUsers = [];
-  }
-  public clearOncallTeams() {
-    this.oncallTeams = [];
-  }
-  public clearOncallSerices() {
-    this.oncallServices = [];
-  }
-  public clearOncallPinnedTeams() {
-    this.oncallPinnedTeams = [];
-  }
 
   // get list of all active oncall users
   public getOncallUsers() : Observable<OncallUser[]> {
@@ -230,12 +216,15 @@ export class IrisProvider {
     var returnObservable = startObservable
       .flatMap(() => this.http.get<OncallUser[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users?fields=name&fields=full_name`, { params: new HttpParams({fromObject: params}) }));
 
-    return returnObservable
-      .do(users => {
-        this.oncallUsers = users.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}});
-        this.refreshOncallUserCache();
+    return returnObservable.map(
+      (users) => {
+            this.oncallUsers = users.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}});
+            this.refreshOncallUserCache();
+            this.oncallUsersLoaded = true;
+            return this.oncallUsers;
+          }
+      );
 
-      });
   }
 
   // get get full oncall user
@@ -250,7 +239,22 @@ export class IrisProvider {
     var returnObservable = startObservable
       .flatMap(() => forkJoin([user_get, shifts_get, teams_get]));
 
-    return returnObservable;
+    return returnObservable.map(
+      (data) => {
+            let user = new OncallUser;
+            user.id = data[0]['id'];
+            user.name = data[0]['name'];
+            user.full_name = data[0]['full_name'];
+            user.time_zone = data[0]['time_zone'];
+            user.photo_url = data[0]['photo_url'];
+            user.active = data[0]['active'];
+            user.god = data[0]['god'];
+            user.contacts = data[0]['contacts'];
+            user.upcoming_shifts = data[1];
+            user.teams = data[2];
+            return user;
+          }
+      );
   }
 
   // encode user array as string to persist in local storage
@@ -287,12 +291,14 @@ export class IrisProvider {
     var returnObservable = startObservable
       .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams?fields=name`, { params: new HttpParams({fromObject: params}) }));
 
-    return returnObservable
-      .do(teams => {
+    return returnObservable.map(
+      (teams) => {
         this.oncallTeams = teams.sort();
-        this.refreshOncallTeamCache();
-      });
-
+            this.refreshOncallTeamCache();
+            this.oncallTeamsLoaded = true;
+            return this.oncallTeams;
+          }
+      );
   }
 
     // get full oncall team
@@ -305,8 +311,19 @@ export class IrisProvider {
       // Get all user data from multiple api endpoints
       var returnObservable = startObservable
         .flatMap(() => forkJoin([team_get, summary_get]));
-  
-      return returnObservable;
+      
+      return returnObservable.map(
+        (data) => {
+              let team = new OncallTeam;
+              team.name = data[0]['name'];
+              team.email = data[0]['email'];
+              team.slack_channel = data[0]['slack_channel'];
+              team.summary = data[1];
+              team.services = data[0]['services'];
+              team.rosters = data[0]['rosters'];
+              return team;
+            }
+        );
     }
   
   // encode team array as string to persist in local storage
@@ -343,11 +360,14 @@ export class IrisProvider {
     var returnObservable = startObservable
       .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/services`, { params: new HttpParams({fromObject: params}) }));
 
-    return returnObservable
-      .do(services => {
+    return returnObservable.map(
+      (services) => {
         this.oncallServices = services.sort();
-        this.refreshOncallServiceCache();
-      });
+            this.refreshOncallTeamCache();
+            this.oncallServicesLoaded = true;
+            return this.oncallServices;
+          }
+      );
   }
 
   public getOncallService(service) : Observable<string[]> {
@@ -396,13 +416,7 @@ export class IrisProvider {
     var returnObservable = startObservable
       .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}/pinned_teams`));
 
-    return returnObservable
-    .do(teams => {
-      this.clearOncallPinnedTeams();
-      for (let team of teams) {
-        this.oncallPinnedTeams.push(team);
-      }
-    });
+    return returnObservable;
   }
 
   // Get incident info from filters specified.

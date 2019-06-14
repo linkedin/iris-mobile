@@ -34,6 +34,7 @@
               <span *ngIf="user.contacts?.sms">
               <strong>SMS:</strong> {{ user.contacts.sms }}
               </span>
+              <p *ngIf="!user.contacts"> This user has no contacts defined.</p> 
           </ion-list>
       </ion-card-content>
     </ion-card>
