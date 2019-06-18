@@ -228,7 +228,7 @@ export class IrisProvider {
   }
 
   // get get full oncall user
-  public getOncallUser(username) : Observable<any> {
+  public getOncallUser(username) : Observable<OncallUser> {
 
     let startObservable = this.renewAccessKey(),
     user_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}`),
@@ -302,7 +302,7 @@ export class IrisProvider {
   }
 
     // get full oncall team
-    public getOncallTeam(team_name) : Observable<any> {
+    public getOncallTeam(team_name) : Observable<OncallTeam> {
 
       let startObservable = this.renewAccessKey(),
       team_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams/${team_name}`),

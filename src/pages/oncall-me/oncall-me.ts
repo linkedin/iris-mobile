@@ -7,12 +7,13 @@ import { LogoutProvider } from '../../providers/logout/logout';
 
 @Component({
   selector: 'page-oncall-me',
-  templateUrl: 'oncall-me.html',
+  templateUrl: '../oncall-user/oncall-user.html',
 })
 export class OncallMePage {
   user: OncallUser;
   loading: boolean;
   loadingError: boolean;
+  mePageBool: boolean = true;
 
   constructor(private logOut: LogoutProvider, public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, public iris: IrisProvider, private toastCtrl: ToastController, private irisInfo: IrisInfoProvider) {
   }

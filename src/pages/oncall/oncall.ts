@@ -13,24 +13,27 @@ import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
   templateUrl: 'oncall.html',
 })
 export class OncallPage {
-  public searchTerm: string = "";
-  public users: any = [];
-  public teams: any = [];
-  public services: any = [];
-  public pinnedTeams: OncallTeam[];
+  searchTerm: string = "";
+  users: any = [];
+  teams: any = [];
+  services: any = [];
+  pinnedTeams: OncallTeam[];
 
   unfilteredUsers: Array<OncallUser> = [];
   unfilteredTeams: Array<string> = [];
   unfilteredServices: Array<string> = [];
 
-  public usersLoading: boolean = true;
-  public teamsLoading: boolean = true;
-  public servicesLoading: boolean = true;
-  public pinnedTeamsLoading: boolean = true;
+  usersLoading: boolean = true;
+  teamsLoading: boolean = true;
+  servicesLoading: boolean = true;
+  pinnedTeamsLoading: boolean = true;
   loadingError: boolean = false;
 
 
-  constructor(private logOut: LogoutProvider, public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, private iris: IrisProvider, private toastCtrl: ToastController, private irisInfo: IrisInfoProvider) {
+  constructor(private logOut: LogoutProvider, public navCtrl: NavController,
+    public navParams: NavParams, private actionCtrl: ActionSheetController,
+    private iris: IrisProvider, private toastCtrl: ToastController,
+    private irisInfo: IrisInfoProvider) {
   }
 
   ionViewWillEnter() {
@@ -166,7 +169,7 @@ export class OncallPage {
 
   userTapped(tapped_user) {
     this.navCtrl.push(OncallUserPage, {
-      name: tapped_user
+      username: tapped_user
     });
   }
   

@@ -1,7 +1,16 @@
 <ion-header>
 
-  <ion-navbar color="dark">
+  <ion-navbar *ngIf="!mePageBool" color="dark">
     <ion-title>Oncall User</ion-title>
+  </ion-navbar>
+
+  <ion-navbar *ngIf="mePageBool" color="dark">
+    <ion-title>Me</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openActionSheet()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
