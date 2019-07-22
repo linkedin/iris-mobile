@@ -8,13 +8,12 @@
 
 
 <ion-content >
-  <ion-spinner *ngIf="loading" class="incident-loader">Loading...</ion-spinner>
   <div class="dark" *ngIf="team?.name">
     <h3 class="dark darkText">{{ team.name }}</h3>
     <p *ngIf="team.email" class="darkText">{{ team.email }}</p>
     <p *ngIf="team.slack_channel" class="darkText">{{ team.slack_channel }}</p>
-
   </div>
+  <ion-spinner *ngIf="loading" class="spinnerCentered">Loading...</ion-spinner>
   <div class="team-info" padding *ngIf="team?.name">
   
 
