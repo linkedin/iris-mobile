@@ -22,3 +22,28 @@ page-oncall-user {
         color: 	#3366BB ;
     }
 }
+
+page-oncall-me {
+    .dark{
+    background-color: #222222;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    margin-bottom: 4%;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0px;
+}
+.darkText{
+    color: white;
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-top: 0px;
+}
+.card .list .item {
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+}
+.linkText{
+    color: 	#3366BB ;
+}
+}
