@@ -75,7 +75,7 @@
       </ion-card-content>
     </ion-card>
   </div>
-  <ion-spinner *ngIf="loading" class="spinnerCentered">Loading...</ion-spinner>
+  <ion-spinner *ngIf="loading && !user?.id" class="spinnerCentered">Loading...</ion-spinner>
   <ion-footer *ngIf="loadingError">
     <ion-toolbar (click)="getUser()">
       <ion-item>Error fetching data, press to reload:

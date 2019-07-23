@@ -1,3 +1,8 @@
-page-tabs {
-
-}
+.highlight {
+    position: absolute;
+    height: 2px;
+    background: color($colors, light);
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+    z-index: 100;
+  }

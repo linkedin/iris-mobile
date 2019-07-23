@@ -24,7 +24,7 @@
 
 
 <ion-content padding>
-  <ion-spinner *ngIf="(usersLoading || teamsLoading || servicesLoading) && pinnedTeamLoading" class="spinnerCenter"></ion-spinner>
+  <ion-spinner *ngIf="(usersLoading || teamsLoading || servicesLoading) && (pinnedTeams?.length < 1)" class="spinnerCentered"></ion-spinner>
   <ion-list *ngIf="searchTerm.length > 0 || (pinnedTeams?.length < 1 && (!usersLoading && !teamsLoading && !servicesLoading))">
     <ion-item-divider color="light">
       <ion-label>
@@ -91,7 +91,7 @@
 
   </ion-list>
   <div *ngIf="!pinnedTeamsLoading && pinnedTeams && searchTerm.length == 0">
-    <h1 padding>Pinned teams:</h1>
+    <h1 padding *ngIf="pinnedTeams?.length > 0">Pinned teams:</h1>
     <ion-card *ngFor="let pinnedTeam of pinnedTeams" (tap)="teamTapped(pinnedTeam.name)">
       <ion-card-header>
         <div class="textWrap"><ion-title><ion-icon name="flag" item-left padding></ion-icon>{{pinnedTeam.name}}</ion-title></div>
