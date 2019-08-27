@@ -17,6 +17,7 @@ import { OncallTeamPage } from '../pages/oncall-team/oncall-team';
 import { TabsPage } from '../pages/tabs/tabs';
 import { FilterModalPage } from '../pages/filter-modal/filter-modal';
 import { ApiUrlPage } from '../pages/api-url/api-url';
+import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
 
 import { IncidentContextPage, FormatContextPipe } from '../pages/incident-context/incident-context';
 import { IrisProvider } from '../providers/iris/iris';
@@ -46,7 +47,8 @@ import { LogoutProvider } from '../providers/logout/logout';
     GraphBlockComponent,
     FormatContextPipe,
     FilterModalPage,
-    ApiUrlPage
+    ApiUrlPage,
+    PrivacyPolicyPage
   ],
   imports: [
     BrowserModule,
@@ -68,7 +70,8 @@ import { LogoutProvider } from '../providers/logout/logout';
     OncallPage,
     GraphBlockComponent,
     FilterModalPage,
-    ApiUrlPage
+    ApiUrlPage,
+    PrivacyPolicyPage
   ],
   providers: [
     StatusBar,

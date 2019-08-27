@@ -9,6 +9,7 @@ import { LogoutProvider } from '../../providers/logout/logout';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 import { IrisProvider, Incident, IncidentFilters } from '../../providers/iris/iris';
 import { ApiUrlPage } from '../api-url/api-url';
+import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
 import { IncidentContextPage } from '../incident-context/incident-context';
 import { FilterModalPage } from '../filter-modal/filter-modal';
 
@@ -225,6 +226,14 @@ export class IncidentsPage {
             this.logOut.showLogout();
           },
           icon: 'exit'
+        },
+        {
+          text: 'Privacy Policy',
+          cssClass: 'logout-button',
+          handler: () => {
+            this.navCtrl.push(PrivacyPolicyPage);
+          },
+          icon: 'document'
         }
       ]
     })

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
 import { IrisProvider, OncallUser} from '../../providers/iris/iris';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
+import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 import { LogoutProvider } from '../../providers/logout/logout';
 
@@ -56,6 +57,14 @@ export class OncallMePage {
             this.logOut.showLogout();
           },
           icon: 'exit'
+        },
+        {
+          text: 'Privacy Policy',
+          cssClass: 'logout-button',
+          handler: () => {
+            this.navCtrl.push(PrivacyPolicyPage);
+          },
+          icon: 'document'
         }
       ]
     })

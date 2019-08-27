@@ -4,6 +4,7 @@ import { NavController, NavParams, ActionSheetController, ToastController } from
 import { LogoutProvider } from '../../providers/logout/logout';
 import { OncallUserPage } from '../oncall-user/oncall-user';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
+import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
 import { IrisProvider, OncallUser, OncallTeam } from '../../providers/iris/iris';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 
@@ -149,7 +150,7 @@ export class OncallPage {
       this.services = [];
     }
   }
-
+  
   openActionSheet(){
     // Open action bar from the upper right ... button
     let actionSheet = this.actionCtrl.create({
@@ -161,7 +162,16 @@ export class OncallPage {
             this.logOut.showLogout();
           },
           icon: 'exit'
-        }
+        },
+        {
+          text: 'Privacy Policy',
+          cssClass: 'logout-button',
+          handler: () => {
+            this.navCtrl.push(PrivacyPolicyPage);
+          },
+          icon: 'document'
+        },
+
       ]
     })
     actionSheet.present()
