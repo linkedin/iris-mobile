@@ -157,7 +157,6 @@ export class OncallPage {
       buttons: [
         {
           text: 'Log out',
-          cssClass: 'logout-button',
           handler: () => {
             this.logOut.showLogout();
           },
@@ -170,7 +169,7 @@ export class OncallPage {
             this.navCtrl.push(PrivacyPolicyPage);
           },
           icon: 'document'
-        },
+        }
 
       ]
     })

@@ -25,8 +25,8 @@
         <ion-list>
           <div *ngFor="let role of ['primary', 'secondary', 'manager', 'shadow']">
             <div *ngIf="team.summary?.current[role]">
-              <ion-item *ngFor="let user of team.summary.current[role]" (tap)="userTapped(user.user)">
-                  <strong>{{ role }}:</strong> {{user.full_name}}
+              <ion-item class="no-padding" *ngFor="let user of team.summary.current[role]" (tap)="userTapped(user.user)">
+                <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span> {{user.full_name}}
                   <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
                   <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
                   <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
@@ -47,8 +47,8 @@
         <ion-list>
           <div *ngFor="let role of ['primary', 'secondary', 'manager', 'shadow']">
             <div *ngIf="team.summary?.next[role]">
-              <ion-item *ngFor="let user of team.summary.next[role]" (tap)="userTapped(user.user)">
-                  <strong>{{ role }}:</strong> {{user.full_name}}
+              <ion-item class="no-padding"  *ngFor="let user of team.summary.next[role]" (tap)="userTapped(user.user)">
+                  <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span> {{user.full_name}}
                   <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
                   <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
                   <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
@@ -68,8 +68,8 @@
       <ion-card-content>
         <ion-list>
           <div *ngFor="let role of ['unavailable', 'vacation']">
-            <ion-item *ngFor="let user of team.summary?.current[role]" (tap)="userTapped(user.user)">
-                <strong>{{ role }}:</strong> {{user.full_name}}
+            <ion-item class="no-padding" *ngFor="let user of team.summary?.current[role]" (tap)="userTapped(user.user)">
+              <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span> {{user.full_name}}
                 <p>Unavailable until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
                 <ion-icon name="arrow-dropright" item-right></ion-icon>
             </ion-item>
@@ -85,8 +85,8 @@
       <ion-card-content>
         <div *ngFor="let roster of objectKeys(team.rosters)">
             <strong>{{ roster }}:</strong>
-            <span *ngFor="let user of team.rosters[roster].users" outline="true" (tap)="userTapped(user.name)">
-              <span class="linkText" >{{ user.name }}</span><span *ngIf="!$last">,&nbsp;</span>
+            <span  *ngFor="let user of team.rosters[roster].users; last as isLast" outline="true" (tap)="userTapped(user.name)">
+                <span class="linkText" >{{ user.name }}</span><span *ngIf="!isLast">,&nbsp;</span>
             </span>
         </div>
       </ion-card-content>

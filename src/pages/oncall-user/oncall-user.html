@@ -29,38 +29,40 @@
         <ion-card-title>Contacts</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-          <ion-list>
-              <span *ngIf="user.contacts?.email">
-              <strong>Email:</strong>  {{ user.contacts.email }},
-              </span>
-              <span *ngIf="user.contacts?.slack">
-              <strong>Slack:</strong> {{ user.contacts.slack }},
-              </span>
-              <span *ngIf="user.contacts?.call">
-              <strong>Call:</strong> {{ user.contacts.call }},
-              </span>
-              <span *ngIf="user.contacts?.sms">
-              <strong>SMS:</strong> {{ user.contacts.sms }}
-              </span>
-              <p *ngIf="!user.contacts"> This user has no contacts defined.</p> 
-          </ion-list>
+        <ion-list>
+          <p *ngIf="user.contacts?.email">
+            <strong>Email:</strong> {{ user.contacts.email }}
+          </p>
+          <p *ngIf="user.contacts?.slack">
+            <strong>Slack:</strong> {{ user.contacts.slack }}
+          </p>
+          <p *ngIf="user.contacts?.call">
+            <strong>Call:</strong> {{ user.contacts.call }}
+          </p>
+          <p *ngIf="user.contacts?.sms">
+            <strong>SMS:</strong> {{ user.contacts.sms }}
+          </p>
+          <p *ngIf="!user.contacts"> This user has no contacts defined.</p>
+        </ion-list>
       </ion-card-content>
     </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Upcoming shifts</ion-card-title>
-    </ion-card-header>
-  <ion-card-content>
-  <ion-list>
-    <ion-item *ngFor="let shift of user.upcoming_shifts">
-      {{ shift.role }}: {{ shift.team }}
-      <p>start: {{shift.start * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-      <p>end: {{shift.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
-    </ion-item>
-  </ion-list>
-  </ion-card-content>
-  </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Upcoming shifts</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item class="no-padding" *ngFor="let shift of user.upcoming_shifts">
+            <span class="chip-color {{shift.role}}">
+              <ion-chip class="role-chip"><span class="chip-workaround">{{ shift.role }}:</span></ion-chip>
+            </span> {{ shift.team }}
+            <p>start: {{shift.start * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+            <p>end: {{shift.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
 
     <ion-card>
       <ion-card-header>
@@ -68,9 +70,9 @@
       </ion-card-header>
       <ion-card-content>
 
-          <span *ngFor="let team of user.teams" (tap)="teamTapped(team)">
-            <span class="linkText">{{ team }},</span>&nbsp;
-          </span>
+        <span *ngFor="let team of user.teams; last as isLast" (tap)="teamTapped(team)">
+          <span class="linkText">{{ team }}</span><span *ngIf="!isLast">,&nbsp;</span>
+        </span>
 
       </ion-card-content>
     </ion-card>

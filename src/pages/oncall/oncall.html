@@ -94,12 +94,12 @@
     <h1 padding *ngIf="pinnedTeams?.length > 0">Pinned teams:</h1>
     <ion-card *ngFor="let pinnedTeam of pinnedTeams" (tap)="teamTapped(pinnedTeam.name)">
       <ion-card-header>
-        <div class="textWrap"><ion-title><ion-icon name="flag" item-left padding></ion-icon>{{pinnedTeam.name}}</ion-title></div>
+        <div class="textWrap"><ion-card-title class="no-bottom">{{pinnedTeam.name}}</ion-card-title></div>
       </ion-card-header>
       <ion-card-content>
-        <div *ngIf="pinnedTeam.summary.current?.primary">
-          <ion-item *ngFor="let user of pinnedTeam.summary.current.primary">
-              <strong>Primary:</strong> {{user.full_name}}
+        <div *ngIf="pinnedTeam.summary.current?.primary">      
+          <ion-item class="no-padding dividers" *ngFor="let user of pinnedTeam.summary.current.primary">
+              <span class="chip-color primary"><ion-chip class="role-chip" ><span class="chip-workaround">Primary:</span></ion-chip></span> {{user.full_name}}
               <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
               <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
               <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>

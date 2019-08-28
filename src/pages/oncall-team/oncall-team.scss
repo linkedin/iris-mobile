@@ -1,6 +1,6 @@
 page-oncall-team {
 
-    .dark{
+    .dark {
         background-color: #222222;
         padding-top: 2%;
         padding-bottom: 2%;
@@ -8,26 +8,34 @@ page-oncall-team {
         max-width: 100%;
         margin-top: 0px;
     }
-    .darkText{
+
+    .darkText {
         color: white;
         padding-left: 10%;
         padding-right: 10%;
         padding-bottom: 0px;
         margin: 4px;
     }
+
     .card .list .item {
         border-top: 1px solid lightgray;
         border-bottom: 1px solid lightgray;
     }
-    .linkText{
-        color: 	#3366BB ;
+
+    .linkText {
+        color: #3366BB;
     }
+
     .spinnerCentered {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 3rem;
+    }
+
+    .comma-separated-list .comma:last-child {
+        visibility: hidden;
     }
 
 }

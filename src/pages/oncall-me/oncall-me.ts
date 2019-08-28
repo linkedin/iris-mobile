@@ -52,7 +52,6 @@ export class OncallMePage {
       buttons: [
         {
           text: 'Log out',
-          cssClass: 'logout-button',
           handler: () => {
             this.logOut.showLogout();
           },
