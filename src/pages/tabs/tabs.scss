@@ -1,8 +1,8 @@
 .highlight {
     position: absolute;
-    height: 2px;
-    background: color($colors, light);
-    transition-duration: 300ms;
+    height: 7px;
+    background: lightblue;
+    transition-duration: 150ms;
     transition-timing-function: ease;
     z-index: 100;
   }
