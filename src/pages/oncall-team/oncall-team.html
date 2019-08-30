@@ -26,7 +26,8 @@
           <div *ngFor="let role of ['primary', 'secondary', 'manager', 'shadow']">
             <div *ngIf="team.summary?.current[role]">
               <ion-item class="no-padding" *ngFor="let user of team.summary.current[role]" (tap)="userTapped(user.user)">
-                <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span> {{user.full_name}}
+                  <div class="no-overflow">{{user.full_name}}</div>
+                  <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span>
                   <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
                   <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
                   <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
@@ -35,6 +36,7 @@
               </ion-item>
             </div>
           </div>
+          <div class="divider"></div>
         </ion-list>
       </ion-card-content>
     </ion-card>
@@ -48,7 +50,8 @@
           <div *ngFor="let role of ['primary', 'secondary', 'manager', 'shadow']">
             <div *ngIf="team.summary?.next[role]">
               <ion-item class="no-padding"  *ngFor="let user of team.summary.next[role]" (tap)="userTapped(user.user)">
-                  <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span> {{user.full_name}}
+                  <div class="no-overflow">{{user.full_name}}</div>
+                  <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span>
                   <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
                   <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
                   <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
@@ -57,6 +60,7 @@
               </ion-item>
             </div>
           </div>
+          <div class="divider"></div>
         </ion-list>
       </ion-card-content>
     </ion-card>
@@ -69,11 +73,14 @@
         <ion-list>
           <div *ngFor="let role of ['unavailable', 'vacation']">
             <ion-item class="no-padding" *ngFor="let user of team.summary?.current[role]" (tap)="userTapped(user.user)">
-              <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span> {{user.full_name}}
+                <div class="no-overflow">{{user.full_name}}</div>
+                <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span>
+                <br>
                 <p>Unavailable until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
                 <ion-icon name="arrow-dropright" item-right></ion-icon>
             </ion-item>
           </div>
+          <div class="divider"></div>
         </ion-list>
       </ion-card-content>
     </ion-card>

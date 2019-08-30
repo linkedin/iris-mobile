@@ -48,8 +48,25 @@ body {
     user-select: text;
 }
 
+.divider {
+    border-bottom: 1px solid lightgray;
+    width: inherit;
+}
+
 .no-padding {
     padding: 0px !important;
+}
+
+.no-overflow{
+    width: 100%;
+    max-width: 20ch;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    font-weight: bold;
+    
 }
 
 // Very hacky workaround to get around bugs in ionic 3 ion-chip rendering
@@ -83,8 +100,8 @@ body {
 
 .role-chip {
     background-color: inherit;
-    padding-right: 20 px;
     visibility: visible;
+    float: right;
 }
 
 .chip-workaround {

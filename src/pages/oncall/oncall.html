@@ -24,8 +24,8 @@
 
 
 <ion-content padding>
-  <ion-spinner *ngIf="(usersLoading || teamsLoading || servicesLoading) && (pinnedTeams?.length < 1)" class="spinnerCentered"></ion-spinner>
-  <ion-list *ngIf="searchTerm.length > 0 || (pinnedTeams?.length < 1 && (!usersLoading && !teamsLoading && !servicesLoading))">
+  <ion-spinner *ngIf="(usersLoading || teamsLoading || servicesLoading || pinnedTeamsLoading) && !loadingError" class="spinnerCentered"></ion-spinner>
+  <ion-list *ngIf="searchTerm.length > 0 || (pinnedTeams?.length < 1 && (!usersLoading && !teamsLoading && !servicesLoading && !pinnedTeamsLoading))">
     <ion-item-divider color="light">
       <ion-label>
         Teams
@@ -90,16 +90,18 @@
     </ion-item>
 
   </ion-list>
-  <div *ngIf="!pinnedTeamsLoading && pinnedTeams && searchTerm.length == 0">
+  <div *ngIf="!pinnedTeamsLoading && pinnedTeams && searchTerm.length == 0" >
     <h1 padding *ngIf="pinnedTeams?.length > 0">Pinned teams:</h1>
     <ion-card *ngFor="let pinnedTeam of pinnedTeams" (tap)="teamTapped(pinnedTeam.name)">
       <ion-card-header>
         <div class="textWrap"><ion-card-title class="no-bottom">{{pinnedTeam.name}}</ion-card-title></div>
       </ion-card-header>
       <ion-card-content>
-        <div *ngIf="pinnedTeam.summary.current?.primary">      
-          <ion-item class="no-padding dividers" *ngFor="let user of pinnedTeam.summary.current.primary">
-              <span class="chip-color primary"><ion-chip class="role-chip" ><span class="chip-workaround">Primary:</span></ion-chip></span> {{user.full_name}}
+        <div *ngIf="pinnedTeam.summary.current?.primary">
+          <div class="divider"></div>      
+          <ion-item class="no-padding" *ngFor="let user of pinnedTeam.summary.current.primary">
+              <div class="no-overflow">{{user.full_name}}</div>
+              <span class="chip-color primary"><ion-chip class="role-chip" ><span class="chip-workaround">Primary:</span></ion-chip></span>
               <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
               <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
               <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
@@ -107,6 +109,7 @@
               <ion-icon name="arrow-dropright" item-right></ion-icon>
           </ion-item>
         </div>
+        <div class="divider"></div>
       </ion-card-content>
     </ion-card>
   </div>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { IrisProvider, OncallUser} from '../../providers/iris/iris';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
+import {DomSanitizer} from '@angular/platform-browser';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class OncallUserPage {
   loading: boolean;
   loadingError: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public iris: IrisProvider, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public iris: IrisProvider, private toastCtrl: ToastController, private sanitizer: DomSanitizer) {
   }
 
   ionViewWillEnter() {
@@ -23,7 +24,6 @@ export class OncallUserPage {
   }
 
   getUser(){
-    this.user = new OncallUser;
     this.loading = true;
     this.loadingError = false;
     this.iris.getOncallUser(this.navParams.get('username')).subscribe(
@@ -44,6 +44,14 @@ export class OncallUserPage {
     this.navCtrl.push(OncallTeamPage, {
       team_name: tapped_team
     });
+  }
+
+  getSmsUrl(smsNumber) {
+    var smslink = smsNumber.replace(/ /, '');
+    smslink = smslink.replace(/-/g, '');
+    smslink.replace(/\+/, '');
+    smslink = 'sms:' + smslink;
+    return this.sanitizer.bypassSecurityTrustUrl(smslink);
   }
 
   createToast(message: string) {

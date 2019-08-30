@@ -31,16 +31,16 @@
       <ion-card-content>
         <ion-list>
           <p *ngIf="user.contacts?.email">
-            <strong>Email:</strong> {{ user.contacts.email }}
+            <strong>Email:</strong> <a href="mailto:{{ user.contacts.email }}" >{{ user.contacts.email }}</a>
           </p>
           <p *ngIf="user.contacts?.slack">
-            <strong>Slack:</strong> {{ user.contacts.slack }}
+            <strong>Slack:</strong>  <a href="slack://open" >{{ user.contacts.slack }}</a>
           </p>
           <p *ngIf="user.contacts?.call">
-            <strong>Call:</strong> {{ user.contacts.call }}
+            <strong>Call:</strong>  <a href="tel:{{user.contacts.call }}" >{{ user.contacts.call }}</a>
           </p>
           <p *ngIf="user.contacts?.sms">
-            <strong>SMS:</strong> {{ user.contacts.sms }}
+            <strong>SMS:</strong> <a [href]="getSmsUrl(user.contacts.sms)" >{{user.contacts.sms}}</a>
           </p>
           <p *ngIf="!user.contacts"> This user has no contacts defined.</p>
         </ion-list>
@@ -54,12 +54,12 @@
       <ion-card-content>
         <ion-list>
           <ion-item class="no-padding" *ngFor="let shift of user.upcoming_shifts">
-            <span class="chip-color {{shift.role}}">
-              <ion-chip class="role-chip"><span class="chip-workaround">{{ shift.role }}:</span></ion-chip>
-            </span> {{ shift.team }}
+            <div class="no-overflow">{{ shift.team }}</div>
+            <span class="chip-color {{shift.role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ shift.role }}:</span></ion-chip></span>
             <p>start: {{shift.start * 1000 | date:'EEE MMM dd, zzzz'}} </p>
             <p>end: {{shift.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
           </ion-item>
+          <div class="divider"></div>
         </ion-list>
       </ion-card-content>
     </ion-card>

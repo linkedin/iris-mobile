@@ -40,8 +40,9 @@ export class OncallPage {
   ionViewWillEnter() {
     // pinned teams display on call now data so make sure they are up to date every time
     this.pinnedTeamsLoading = true;
-    this.initOncallLists();
     this.initPinnedTeams();
+    this.initOncallLists();
+    
   }
 
   initOncallLists(){
@@ -110,14 +111,19 @@ export class OncallPage {
           this.iris.getOncallTeam(pinned_team).subscribe(
             (team_data) => {      
               this.pinnedTeams.push(team_data);
+              if (this.pinnedTeams.length == teams_data.length){
+                // wait untill all pinned teams have loaded
+                this.pinnedTeamsLoading = false;
+              }
+              
             },
             () => {
               this.createToast('Error: failed to fetch oncall Team.');
+              this.pinnedTeamsLoading = false;
               this.loadingError = true;
             }
           );
 
-          this.pinnedTeamsLoading = false;
         }
       },
       () => {
@@ -196,6 +202,7 @@ export class OncallPage {
         });
       },
       () => {
+        this.createToast('Error: failed to fetch service details.')
       }
     );
   }

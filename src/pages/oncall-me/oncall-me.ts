@@ -5,6 +5,7 @@ import { OncallTeamPage } from '../oncall-team/oncall-team';
 import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 import { LogoutProvider } from '../../providers/logout/logout';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'page-oncall-me',
@@ -16,7 +17,7 @@ export class OncallMePage {
   loadingError: boolean;
   mePageBool: boolean = true;
 
-  constructor(private logOut: LogoutProvider, public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, public iris: IrisProvider, private toastCtrl: ToastController, private irisInfo: IrisInfoProvider) {
+  constructor(private logOut: LogoutProvider, public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, public iris: IrisProvider, private toastCtrl: ToastController, private irisInfo: IrisInfoProvider, private sanitizer: DomSanitizer) {
   }
 
   ionViewWillEnter() {
@@ -44,6 +45,14 @@ export class OncallMePage {
     this.navCtrl.push(OncallTeamPage, {
       team_name: tapped_team
     });
+  }
+
+  getSmsUrl(smsNumber) {
+    var smslink = smsNumber.replace(/ /g, '');
+    smslink = smslink.replace(/-/g, '');
+    smslink.replace(/\+/, '');
+    smslink = 'sms:' + smslink;
+    return this.sanitizer.bypassSecurityTrustUrl(smslink);
   }
 
   openActionSheet() {
