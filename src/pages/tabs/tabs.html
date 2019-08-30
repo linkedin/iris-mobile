@@ -1,6 +1,6 @@
 <ion-tabs #navTabs (ionChange)="selectedTab()">
-  <ion-tab tabIcon="aperture" tabTitle="Iris" [root]="rootPage"></ion-tab>
-  <ion-tab tabIcon="alarm" tabTitle="Oncall" [root]="oncallPage"></ion-tab>
+  <ion-tab tabIcon="custom-iris" tabTitle="Iris" [root]="rootPage"></ion-tab>
+  <ion-tab tabIcon="custom-oncall" tabTitle="Oncall" [root]="oncallPage"></ion-tab>
   <ion-tab tabIcon="contact" tabTitle="Me" [root]="mePage"></ion-tab>
   <div *ngIf="isTab" class="highlight"
     [style.width]="highlight.width"
