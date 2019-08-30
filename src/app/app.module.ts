@@ -12,7 +12,6 @@ import { IncidentsPage } from '../pages/incidents/incidents';
 import { LoginPage } from '../pages/login/login';
 import { OncallPage } from '../pages/oncall/oncall';
 import { OncallUserPage } from '../pages/oncall-user/oncall-user';
-import { OncallMePage } from '../pages/oncall-me/oncall-me';
 import { OncallTeamPage } from '../pages/oncall-team/oncall-team';
 import { TabsPage } from '../pages/tabs/tabs';
 import { FilterModalPage } from '../pages/filter-modal/filter-modal';
@@ -42,7 +41,6 @@ import { LogoutProvider } from '../providers/logout/logout';
     OncallPage,
     OncallUserPage,
     OncallTeamPage,
-    OncallMePage,
     TabsPage,
     GraphBlockComponent,
     FormatContextPipe,
@@ -65,7 +63,6 @@ import { LogoutProvider } from '../providers/logout/logout';
     OncallUserPage,
     OncallTeamPage,
     TabsPage,
-    OncallMePage,
     LoginPage,
     OncallPage,
     GraphBlockComponent,

@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Tabs } from 'ionic-angular';
 import { IncidentsPage } from '../incidents/incidents';
 import { OncallPage } from '../oncall/oncall';
-import { OncallMePage } from '../oncall-me/oncall-me';
+import { OncallUserPage } from '../oncall-user/oncall-user';
 
 
 @Component({
@@ -14,7 +14,7 @@ export class TabsPage {
 
   rootPage:any = IncidentsPage;
   oncallPage:any = OncallPage;
-  mePage:any = OncallMePage;
+  mePage:any = OncallUserPage;
   highlight: {left: string, top: string, width: string}
   isTab: boolean = false
 

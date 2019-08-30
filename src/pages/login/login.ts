@@ -3,7 +3,6 @@ import { NavController, NavParams, Platform, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { IrisProvider } from '../../providers/iris/iris';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
-import { IncidentsPage } from '../incidents/incidents';
 
 @Component({
   selector: 'page-login',
