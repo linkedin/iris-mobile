@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Subject, Observable } from 'rxjs';
 import { IrisInfoProvider } from '../iris_info/iris_info';
+import { forkJoin } from "rxjs/observable/forkJoin";
 
 export class Incident {
   active: boolean;
@@ -17,6 +18,28 @@ export class Incident {
   plan_id: number;
   updated: number;
   title: string;
+}
+
+export class OncallUser {
+  id: number;
+  name: string;
+  full_name: string;
+  time_zone: string;
+  photo_url: string;
+  active: number;
+  god: number;
+  contacts: any;
+  upcoming_shifts: any;
+  teams: any;
+}
+
+export class OncallTeam {
+  name: string;
+  email: string;
+  slack_channel: string;
+  summary: any;
+  services: string[];
+  rosters: any;
 }
 
 export class GraphData {
@@ -53,13 +76,30 @@ class TokenResponse {
 export class IrisProvider {
   dummyRedirect: string = 'http://localhost:7000';
   apiPath: string = '/api/v0/mobile';
+  oncallApiPath: string = '/api/v0/oncall';
   tokenLeeway: number = 600;
   incidents: Map<number, Incident>;
+  oncallUsers: Array<OncallUser>;
+  oncallTeams: Array<string>;
+  oncallServices: Array<string>;
+  oncallUsersLoaded: boolean = false;
+  oncallTeamsLoaded: boolean = false;
+  oncallServicesLoaded: boolean = false;
 
   constructor(public http: HttpClient, private storage: Storage, private irisInfo: IrisInfoProvider,
     private iab: InAppBrowser) {
       this.incidents = new Map();
+      this.oncallUsers = [];
+      this.oncallTeams = [];
+      this.oncallServices = [];
+
     }
+  
+  public initOncallCache() { 
+    this.loadOncallUserCache();
+    this.loadOncallTeamCache();
+    this.loadOncallServiceCache();
+  }
 
   // Ensures valid refresh token, then renews access key
   public renewAccessKey() : Observable<void> {
@@ -165,6 +205,218 @@ export class IrisProvider {
 
   public clearIncidents() {
     this.incidents.clear();
+  }
+
+  // get list of all active oncall users
+  public getOncallUsers() : Observable<OncallUser[]> {
+    let params = {},
+    startObservable = this.renewAccessKey();
+
+    // Get users according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<OncallUser[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users?fields=name&fields=full_name`, { params: new HttpParams({fromObject: params}) }));
+
+    return returnObservable.map(
+      (users) => {
+            this.oncallUsers = users.sort((a, b) => {if(b.name > a.name){return -1;}else{return 1;}});
+            this.refreshOncallUserCache();
+            this.oncallUsersLoaded = true;
+            return this.oncallUsers;
+          }
+      );
+
+  }
+
+  // get get full oncall user
+  public getOncallUser(username) : Observable<OncallUser> {
+
+    let startObservable = this.renewAccessKey(),
+    user_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}`),
+    teams_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}/teams`),
+    shifts_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}/upcoming`);
+
+    // Get all user data from multiple api endpoints
+    var returnObservable = startObservable
+      .flatMap(() => forkJoin([user_get, shifts_get, teams_get]));
+
+    return returnObservable.map(
+      (data) => {
+            let user = new OncallUser;
+            user.id = data[0]['id'];
+            user.name = data[0]['name'];
+            user.full_name = data[0]['full_name'];
+            user.time_zone = data[0]['time_zone'];
+            user.photo_url = data[0]['photo_url'];
+            user.active = data[0]['active'];
+            user.god = data[0]['god'];
+            user.contacts = data[0]['contacts'];
+            user.upcoming_shifts = data[1];
+            user.teams = data[2];
+            return user;
+          }
+      );
+  }
+
+  // encode user array as string to persist in local storage
+  public refreshOncallUserCache(){
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.set('oncallUserArray', JSON.stringify(this.oncallUsers));
+    })
+
+  }
+
+  // if there is a cached copy of the oncall user array load it
+  public loadOncallUserCache(){
+    this.oncallUsersLoaded = false;
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.get('oncallUserArray').then((val) => {
+        if(val){
+          this.oncallUsers = JSON.parse(val);
+          this.oncallUsersLoaded = true;
+        }
+      });
+    })
+  }
+
+  // get list of all active oncall teams
+  public getOncallTeams() : Observable<string[]> {
+    let params = {},
+    startObservable = this.renewAccessKey();
+
+    // Get teams according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams?fields=name`, { params: new HttpParams({fromObject: params}) }));
+
+    return returnObservable.map(
+      (teams) => {
+        this.oncallTeams = teams.sort();
+            this.refreshOncallTeamCache();
+            this.oncallTeamsLoaded = true;
+            return this.oncallTeams;
+          }
+      );
+  }
+
+    // get full oncall team
+    public getOncallTeam(team_name) : Observable<OncallTeam> {
+
+      let startObservable = this.renewAccessKey(),
+      team_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams/${team_name}`),
+      summary_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams/${team_name}/summary`);
+  
+      // Get all user data from multiple api endpoints
+      var returnObservable = startObservable
+        .flatMap(() => forkJoin([team_get, summary_get]));
+      
+      return returnObservable.map(
+        (data) => {
+              let team = new OncallTeam;
+              team.name = data[0]['name'];
+              team.email = data[0]['email'];
+              team.slack_channel = data[0]['slack_channel'];
+              team.summary = data[1];
+              team.services = data[0]['services'];
+              team.rosters = data[0]['rosters'];
+              return team;
+            }
+        );
+    }
+  
+  // encode team array as string to persist in local storage
+  public refreshOncallTeamCache(){
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.set('oncallTeamArray', JSON.stringify(this.oncallTeams));
+    })
+
+  }
+
+  // if there is a cached copy of the oncall team array load it
+  public loadOncallTeamCache(){
+    this.oncallTeamsLoaded = false;
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.get('oncallTeamArray').then((val) => {
+        if(val){
+          this.oncallTeams = JSON.parse(val);
+          this.oncallTeamsLoaded = true;
+        }
+      });
+    })
+  }
+
+  // get list of all active oncall services
+  public getOncallServices() : Observable<string[]> {
+    let params = {},
+    startObservable = this.renewAccessKey();
+
+    // Get services according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/services`, { params: new HttpParams({fromObject: params}) }));
+
+    return returnObservable.map(
+      (services) => {
+        this.oncallServices = services.sort();
+            this.refreshOncallTeamCache();
+            this.oncallServicesLoaded = true;
+            return this.oncallServices;
+          }
+      );
+  }
+
+  public getOncallService(service) : Observable<string[]> {
+    let startObservable = this.renewAccessKey();
+
+    // Get service according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/services/${service}/teams`));
+
+    return returnObservable;
+
+  }
+
+
+  // encode service array as string to persist in local storage
+  public refreshOncallServiceCache(){
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.set('oncallServiceArray', JSON.stringify(this.oncallServices));
+    })
+
+  }
+
+  // if there is a cached copy of the oncall service array load it
+  public loadOncallServiceCache(){
+    this.oncallServicesLoaded = false;
+
+    this.storage.ready()
+    .then(() => {
+      this.storage.get('oncallServiceArray').then((val) => {
+        if(val){
+          this.oncallServices = JSON.parse(val);
+          this.oncallServicesLoaded = true;
+        }
+      });
+    })
+  }
+
+  
+  public getOncallPinnedTeams(username) : Observable<string[]> {
+    
+    let startObservable = this.renewAccessKey();
+
+    // Get pinned teams according to params
+    var returnObservable = startObservable
+      .flatMap(() => this.http.get<string[]>(`${this.irisInfo.baseUrl}${this.oncallApiPath}/users/${username}/pinned_teams`));
+
+    return returnObservable;
   }
 
   // Get incident info from filters specified.

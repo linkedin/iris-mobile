@@ -1,0 +1,127 @@
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>Oncall</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openActionSheet()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar *ngIf="!usersLoading && !teamsLoading && !servicesLoading"
+    placeholder="Search users, teams, or services"
+    debounce="300"
+    [(ngModel)]="searchTerm"
+    (ionChange)="setFilteredItems()"
+    ></ion-searchbar>
+    <div *ngIf="usersLoading || teamsLoading || servicesLoading" placeholder="Loading">
+      <ion-spinner name="dots"></ion-spinner>
+    </div>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-spinner *ngIf="(usersLoading || teamsLoading || servicesLoading || pinnedTeamsLoading) && !loadingError" class="spinnerCentered"></ion-spinner>
+  <ion-list *ngIf="searchTerm.length > 0 || (pinnedTeams?.length < 1 && (!usersLoading && !teamsLoading && !servicesLoading && !pinnedTeamsLoading))">
+    <ion-item-divider color="light">
+      <ion-label>
+        Teams
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item *ngIf="searchTerm.length > 0 && searchTerm.length < 3">
+      Too many results to display...
+    </ion-item>
+
+    <ion-item *ngIf="searchTerm.length > 2 && teams.length < 1">
+      No results found...
+    </ion-item>
+
+    <ion-item *ngFor="let team of teams" (tap)="teamTapped(team)">
+      <ion-icon name="people" slot="start"></ion-icon>
+      {{ team }}
+    </ion-item>
+
+    <ion-item-divider color="light">
+      <ion-label>
+        Services
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item *ngIf="searchTerm.length > 0 && searchTerm.length < 3">
+      Too many results to display...
+    </ion-item>
+
+    <ion-item *ngIf="searchTerm.length > 2 && services.length < 1">
+      No results found...
+    </ion-item>
+
+    <ion-item *ngFor="let service of services" (tap)="serviceTapped(service)">
+       <ion-icon name="cog" slot="start"></ion-icon>
+      {{ service }}
+      
+    </ion-item>
+
+    <ion-item-divider color="light">
+      <ion-label>
+        Users
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item *ngIf="searchTerm.length > 0 && searchTerm.length < 3">
+      Too many results to display...
+    </ion-item>
+
+    <ion-item *ngIf="searchTerm.length > 2 && users.length < 1">
+      No results found...
+    </ion-item>
+
+    <ion-item *ngIf="!searchTerm">
+      Type in the searchbox to begin searching.
+    </ion-item>
+
+    <ion-item *ngFor="let user of users" (tap)="userTapped(user.name)">
+      <ion-icon name="person" slot="start"></ion-icon>
+      {{ user.name }} - ({{ user.full_name }})
+      
+    </ion-item>
+
+  </ion-list>
+  <div *ngIf="!pinnedTeamsLoading && pinnedTeams && searchTerm.length == 0" >
+    <h1 padding *ngIf="pinnedTeams?.length > 0">Pinned teams:</h1>
+    <ion-card *ngFor="let pinnedTeam of pinnedTeams" (tap)="teamTapped(pinnedTeam.name)">
+      <ion-card-header>
+        <div class="textWrap"><ion-card-title class="no-bottom">{{pinnedTeam.name}}</ion-card-title></div>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngIf="pinnedTeam.summary.current?.primary">
+          <div class="divider"></div>      
+          <ion-item class="no-padding" *ngFor="let user of pinnedTeam.summary.current.primary">
+              <div class="no-overflow">{{user.full_name}}</div>
+              <span class="chip-color primary"><ion-chip class="role-chip" ><span class="chip-workaround">Primary:</span></ion-chip></span>
+              <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
+              <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
+              <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
+              <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+              <ion-icon name="arrow-dropright" item-right></ion-icon>
+          </ion-item>
+        </div>
+        <div class="divider"></div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+<ion-footer *ngIf="loadingError">
+    <ion-toolbar (click)="refreshPress()">
+      <ion-item>Error fetching data, press to reload:
+        <button ion-button outline item-end icon-start>
+          <ion-icon name="sync"></ion-icon>
+          Reload
+        </button>
+      </ion-item>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

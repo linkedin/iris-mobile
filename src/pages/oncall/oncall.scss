@@ -1,0 +1,26 @@
+page-oncall {
+    .fixed-searchbar{
+        position: absolute;
+        padding: 20px;
+    }
+    .searchbar-div{
+        position: absolute;
+        margin-bottom: 5%;
+    }
+    .textWrap{
+        white-space: normal;
+        word-wrap: break-word;
+    }
+    .toolbar-title {
+        text-overflow: inherit;
+        white-space: normal;
+    }
+
+    .spinnerCentered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 3rem;
+    }   
+}

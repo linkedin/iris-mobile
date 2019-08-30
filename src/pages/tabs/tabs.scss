@@ -1,0 +1,36 @@
+.highlight {
+  position: absolute;
+  height: 7px;
+  background: lightblue;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+  z-index: 100;
+}
+
+ion-icon {
+  &[class*="custom-"] {
+    mask-size: contain;
+    mask-position: 50% 50%;
+    mask-repeat: no-repeat;
+    background: currentColor;
+    width: 1em;
+    height: 1em;
+  }
+
+  &[class*="oncall"][ng-reflect-is-active="true"] {
+    mask-image: url("../../assets/custom_icons/oncall_logo_blue.png");
+  }
+
+  &[class*="oncall"][ng-reflect-is-active="false"] {
+    mask-image: url("../../assets/custom_icons/oncall_logo_grey.png");
+  }
+
+  &[class*="iris"][ng-reflect-is-active="true"] {
+    mask-image: url("../../assets/custom_icons/iris_blue.png");
+  }
+
+  &[class*="iris"][ng-reflect-is-active="false"] {
+    mask-image: url("../../assets/custom_icons/iris_grey.png");
+  }
+
+}

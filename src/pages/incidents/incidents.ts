@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, MenuController, ActionSheetController, ModalController, AlertController, ItemSliding, Platform } from 'ionic-angular';
+import { NavController, ToastController, MenuController, ActionSheetController, ModalController, AlertController, ItemSliding, Platform, Events } from 'ionic-angular';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
 import { timer } from 'rxjs/observable/timer';
 
+import { LogoutProvider } from '../../providers/logout/logout';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 import { IrisProvider, Incident, IncidentFilters } from '../../providers/iris/iris';
 import { ApiUrlPage } from '../api-url/api-url';
-import { LoginPage } from '../login/login';
+import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
 import { IncidentContextPage } from '../incident-context/incident-context';
 import { FilterModalPage } from '../filter-modal/filter-modal';
 
@@ -41,7 +42,7 @@ export class IncidentsPage {
   initialLimit: number = 30;
   initialized: boolean = false;
 
-  constructor(public navCtrl: NavController, public iris: IrisProvider,
+  constructor(public events: Events, public navCtrl: NavController, public iris: IrisProvider, private logOut: LogoutProvider,
     public menu: MenuController, private toastCtrl: ToastController, private storage: Storage,
     private actionCtrl: ActionSheetController, private modalCtrl: ModalController,
     private irisInfo: IrisInfoProvider, private alertCtrl: AlertController,
@@ -58,12 +59,15 @@ export class IncidentsPage {
         return;
       }
       if (!this.irisInfo.username) {
-        this.navCtrl.setRoot(LoginPage, {loggedOut: false});
+        // remove tab navigation on logout
+        this.events.publish('user:logout');
         return;
       }
       if (!this.initialized) {
         this.initIncidents();
         this.initPushNotification();
+        this.iris.initOncallCache();
+
       } else {
         let incidents = Array.from(this.iris.incidents.values());
         incidents = incidents.sort((a, b) => {return b['created'] - a['created']});
@@ -219,9 +223,17 @@ export class IncidentsPage {
           text: 'Log out',
           cssClass: 'logout-button',
           handler: () => {
-            this.showLogout();
+            this.logOut.showLogout();
           },
           icon: 'exit'
+        },
+        {
+          text: 'Privacy Policy',
+          cssClass: 'logout-button',
+          handler: () => {
+            this.navCtrl.push(PrivacyPolicyPage);
+          },
+          icon: 'document'
         }
       ]
     })
@@ -258,46 +270,6 @@ export class IncidentsPage {
               navTransition.then(() => this.createToast('Error: failed to claim incidents.'))
             });
             return false
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
-  showLogout() {
-    // Handle logout action sheet button
-    const logout = () => {
-      return this.storage.ready()
-      .then(() => {
-        Promise.all([
-        this.storage.remove("accessKey"),
-        this.storage.remove("accessExpiry"),
-        this.storage.remove("refreshKey"),
-        this.storage.remove("refreshExpiry"),
-        this.storage.remove("username")])})
-    }
-
-    let alert = this.alertCtrl.create({
-      title: 'Log out',
-      message: 'Log out of Iris?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Log out',
-          handler: () => {
-            // Logic again needed for transitions to work properly.
-            // Dismiss alert, then navigate to login page.
-            let navTransition = alert.dismiss()
-            logout().then(() => {
-              navTransition.then(() => {
-                this.navCtrl.setRoot(LoginPage, {loggedOut: true});
-              })
-            })
-            return false;
           }
         }
       ]

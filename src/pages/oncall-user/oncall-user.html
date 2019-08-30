@@ -1,0 +1,91 @@
+<ion-header>
+
+  <ion-navbar *ngIf="!mePageBool" color="dark">
+    <ion-title>Oncall User</ion-title>
+  </ion-navbar>
+
+  <ion-navbar *ngIf="mePageBool" color="dark">
+    <ion-title>Me</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openActionSheet()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <div class="user-info" *ngIf="user?.id">
+    <div class="dark">
+      <h1 class="darkText">{{ user.full_name }}</h1>
+      <h2 class="darkText"> ({{ user.name }}) </h2>
+    </div>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Contacts</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <p *ngIf="user.contacts?.email">
+            <strong>Email:</strong> <a href="mailto:{{ user.contacts.email }}" >{{ user.contacts.email }}</a>
+          </p>
+          <p *ngIf="user.contacts?.slack">
+            <strong>Slack:</strong>  <a href="slack://open" >{{ user.contacts.slack }}</a>
+          </p>
+          <p *ngIf="user.contacts?.call">
+            <strong>Call:</strong>  <a href="tel:{{user.contacts.call }}" >{{ user.contacts.call }}</a>
+          </p>
+          <p *ngIf="user.contacts?.sms">
+            <strong>SMS:</strong> <a [href]="getSmsUrl(user.contacts.sms)" >{{user.contacts.sms}}</a>
+          </p>
+          <p *ngIf="!user.contacts"> This user has no contacts defined.</p>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Upcoming shifts</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item class="no-padding" *ngFor="let shift of user.upcoming_shifts">
+            <div class="no-overflow">{{ shift.team }}</div>
+            <span class="chip-color {{shift.role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ shift.role }}:</span></ion-chip></span>
+            <p>start: {{shift.start * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+            <p>end: {{shift.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+          </ion-item>
+          <div class="divider"></div>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Teams</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <span *ngFor="let team of user.teams; last as isLast" (tap)="teamTapped(team)">
+          <span class="linkText">{{ team }}</span><span *ngIf="!isLast">,&nbsp;</span>
+        </span>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <ion-spinner *ngIf="loading && !user?.id" class="spinnerCentered">Loading...</ion-spinner>
+  <ion-footer *ngIf="loadingError">
+    <ion-toolbar (click)="getUser()">
+      <ion-item>Error fetching data, press to reload:
+        <button ion-button outline item-end icon-start>
+          <ion-icon name="sync"></ion-icon>
+          Reload
+        </button>
+      </ion-item>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

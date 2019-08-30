@@ -1,0 +1,128 @@
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>Oncall Team</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+  <div class="dark" *ngIf="team?.name">
+    <h3 class="dark darkText">{{ team.name }}</h3>
+    <p *ngIf="team.email" class="darkText">{{ team.email }}</p>
+    <p *ngIf="team.slack_channel" class="darkText">{{ team.slack_channel }}</p>
+  </div>
+  <ion-spinner *ngIf="loading" class="spinnerCentered">Loading...</ion-spinner>
+  <div class="team-info" padding *ngIf="team?.name">
+  
+
+    <ion-card *ngIf="team?.summary?.current">
+      <ion-card-header>
+        <ion-card-title>Oncall Now</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <div *ngFor="let role of ['primary', 'secondary', 'manager', 'shadow']">
+            <div *ngIf="team.summary?.current[role]">
+              <ion-item class="no-padding" *ngFor="let user of team.summary.current[role]" (tap)="userTapped(user.user)">
+                  <div class="no-overflow">{{user.full_name}}</div>
+                  <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span>
+                  <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
+                  <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
+                  <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
+                  <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+                  <ion-icon name="arrow-dropright" item-right></ion-icon>
+              </ion-item>
+            </div>
+          </div>
+          <div class="divider"></div>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="team?.summary?.next">
+      <ion-card-header>
+        <ion-card-title>Oncall Next</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <div *ngFor="let role of ['primary', 'secondary', 'manager', 'shadow']">
+            <div *ngIf="team.summary?.next[role]">
+              <ion-item class="no-padding"  *ngFor="let user of team.summary.next[role]" (tap)="userTapped(user.user)">
+                  <div class="no-overflow">{{user.full_name}}</div>
+                  <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span>
+                  <p *ngIf="user.user_contacts?.slack">Slack: {{user.user_contacts.slack}}</p>
+                  <p *ngIf="!user.user_contacts?.slack && user.user_contacts?.email">Email: {{user.user_contacts.email}}</p>
+                  <p *ngIf="user.user_contacts?.call">Call: {{user.user_contacts.call}}</p>
+                  <p>On call until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+                  <ion-icon name="arrow-dropright" item-right></ion-icon>
+              </ion-item>
+            </div>
+          </div>
+          <div class="divider"></div>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="team?.summary?.current?.vacation || team?.summary?.current?.unavailable">
+      <ion-card-header>
+        <ion-card-title>Unavailable Now</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <div *ngFor="let role of ['unavailable', 'vacation']">
+            <ion-item class="no-padding" *ngFor="let user of team.summary?.current[role]" (tap)="userTapped(user.user)">
+                <div class="no-overflow">{{user.full_name}}</div>
+                <span class="chip-color {{role}}"><ion-chip class="role-chip" ><span class="chip-workaround">{{ role }}:</span></ion-chip></span>
+                <br>
+                <p>Unavailable until: {{user.end * 1000 | date:'EEE MMM dd, zzzz'}} </p>
+                <ion-icon name="arrow-dropright" item-right></ion-icon>
+            </ion-item>
+          </div>
+          <div class="divider"></div>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Rosters</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let roster of objectKeys(team.rosters)">
+            <strong>{{ roster }}:</strong>
+            <span  *ngFor="let user of team.rosters[roster].users; last as isLast" outline="true" (tap)="userTapped(user.name)">
+                <span class="linkText" >{{ user.name }}</span><span *ngIf="!isLast">,&nbsp;</span>
+            </span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="team.services.length > 0">
+      <ion-card-header>
+        <ion-card-title>Services</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+          <ion-chip *ngFor="let service of team.services">
+            <ion-label>{{ service }}</ion-label>
+          </ion-chip>
+
+      </ion-card-content>
+    </ion-card>
+
+    
+  </div>
+
+  <ion-footer *ngIf="loadingError">
+    <ion-toolbar (click)="getTeam()">
+      <ion-item>Error fetching data, press to reload:
+        <button ion-button outline item-end icon-start>
+          <ion-icon name="sync"></ion-icon>
+          Reload
+        </button>
+      </ion-item>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

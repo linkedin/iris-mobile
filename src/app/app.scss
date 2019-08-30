@@ -39,4 +39,74 @@ ion-icon {
     &[class*="custom-claim"] {
         mask-image: url(../assets/claim.svg);
     }
-  }
+}
+
+body {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.divider {
+    border-bottom: 1px solid lightgray;
+    width: inherit;
+}
+
+.no-padding {
+    padding: 0px !important;
+}
+
+.no-overflow{
+    width: 100%;
+    max-width: 60%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    font-weight: bold;
+    
+}
+
+// Very hacky workaround to get around bugs in ionic 3 ion-chip rendering
+.chip-color {
+    visibility: hidden;
+}
+
+.chip-color.primary {
+    background: rgba(246, 161, 108, 0.7);
+}
+
+.chip-color.secondary {
+    background: rgba(178, 176, 250, 0.7);
+}
+
+.chip-color.shadow {
+    background: rgba(172, 185, 194, 0.7);
+}
+
+.chip-color.manager {
+    background: rgba(101, 195, 232, 0.7);
+}
+
+.chip-color.vacation {
+    background: rgba(145, 196, 117, 0.7);
+}
+
+.chip-color.unavailable {
+    background: rgba(255, 145, 207, 0.7);
+}
+
+.role-chip {
+    background-color: inherit;
+    visibility: visible;
+    float: right;
+}
+
+.chip-workaround {
+    padding-left: 10px;
+    padding-right: 10px;
+    visibility: visible;
+    font-weight: bold;
+}
