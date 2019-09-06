@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, ToastController, Events  } from 'ionic-angular';
 
 import { LogoutProvider } from '../../providers/logout/logout';
 import { OncallUserPage } from '../oncall-user/oncall-user';
@@ -31,13 +31,20 @@ export class OncallPage {
   loadingError: boolean = false;
 
 
-  constructor(private logOut: LogoutProvider, public navCtrl: NavController,
+  constructor(public events: Events, public navCtrl: NavController, private logOut: LogoutProvider,
     public navParams: NavParams, private actionCtrl: ActionSheetController,
     private iris: IrisProvider, private toastCtrl: ToastController,
     private irisInfo: IrisInfoProvider) {
   }
 
   ionViewWillEnter() {
+
+    if (!this.irisInfo.username) {
+      // remove tab navigation on logout
+      this.events.publish('user:logout');
+      return;
+    }
+
     // pinned teams display on call now data so make sure they are up to date every time
     this.pinnedTeamsLoading = true;
     this.initPinnedTeams();

@@ -21,11 +21,12 @@ export class LoginPage {
     this.debug = false;
     this.loggedOut = true;
 
-    events.subscribe('user:manualLogout', () => {
-      this.loggedOut = true;
-      this.events.publish('user:logout');
-    });
+  }
 
+  ionViewWillEnter() {
+    if (this.navParams.get('manualLogout')) {
+      this.loggedOut = true;
+    }
   }
   
   resetCredentials() {

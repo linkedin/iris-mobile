@@ -27,6 +27,11 @@ export class MyApp {
       this.rootPage = LoginPage;
     });
 
+    events.subscribe('user:manualLogout', () => {
+      this.nav.push(LoginPage, {'manualLogout': true});
+      this.rootPage = LoginPage;
+    });
+
     // navigate to tabspage
     events.subscribe('user:login', () => {
       this.nav.push(TabsPage);
