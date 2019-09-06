@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController, Events } from 'ionic-angular';
 import { IrisProvider, OncallTeam} from '../../providers/iris/iris';
+import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 import { OncallUserPage } from '../oncall-user/oncall-user';
 
 
@@ -13,12 +14,19 @@ export class OncallTeamPage {
   loading: boolean;
   loadingError: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public iris: IrisProvider, private toastCtrl: ToastController) {
+  constructor(public events: Events, public navCtrl: NavController, public navParams: NavParams, public iris: IrisProvider, private irisInfo: IrisInfoProvider, private toastCtrl: ToastController) {
   }
 
   objectKeys = Object.keys;
 
   ionViewWillEnter() {
+
+    if (!this.irisInfo.username) {
+      // remove tab navigation on logout
+      this.events.publish('user:logout');
+      return;
+    }
+
     this.getTeam();
   }
 

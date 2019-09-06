@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, ActionSheetController } from 'ionic-angular';
+import { NavController, NavParams, ToastController, ActionSheetController, Events } from 'ionic-angular';
 import { IrisProvider, OncallUser } from '../../providers/iris/iris';
 import { OncallTeamPage } from '../oncall-team/oncall-team';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
@@ -20,10 +20,17 @@ export class OncallUserPage {
   loadingError: boolean;
   mePageBool: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, private logOut: LogoutProvider, public iris: IrisProvider, private irisInfo: IrisInfoProvider, private toastCtrl: ToastController, private sanitizer: DomSanitizer) {
+  constructor(public events: Events, public navCtrl: NavController, public navParams: NavParams, private actionCtrl: ActionSheetController, private logOut: LogoutProvider, public iris: IrisProvider, private irisInfo: IrisInfoProvider, private toastCtrl: ToastController, private sanitizer: DomSanitizer) {
   }
 
   ionViewWillEnter() {
+
+    if (!this.irisInfo.username) {
+      // remove tab navigation on logout
+      this.events.publish('user:logout');
+      return;
+    }
+
     if (this.navParams.get('username')) {
       this.mePageBool = false;
       this.getUser();
