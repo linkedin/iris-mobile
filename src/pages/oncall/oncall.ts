@@ -113,6 +113,9 @@ export class OncallPage {
     this.iris.getOncallPinnedTeams(this.irisInfo.username).subscribe(
       (teams_data) => {
         // fire off calls for pinned teams and render them 
+        if(teams_data.length == 0){
+          this.pinnedTeamsLoading = false;
+        }
         this.pinnedTeams = [];
         for(let pinned_team of teams_data){
           this.iris.getOncallTeam(pinned_team).subscribe(
