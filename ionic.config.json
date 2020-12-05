@@ -9,5 +9,6 @@
       "path": "/iris_api",
       "proxyUrl": "http://localhost:16648"
     }
-  ]
+  ],
+  "app_id": ""
 }

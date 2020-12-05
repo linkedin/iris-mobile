@@ -488,6 +488,11 @@ export class IrisProvider {
     return this.renewAccessKey().flatMap(() => this.http.get(`${this.irisInfo.baseUrl}${this.apiPath}/graph`, options))
   }
 
+  // Suppress alerts
+  public suppressNodes(incidentId) {
+    return this.renewAccessKey().flatMap(() => this.http.post(`${this.irisInfo.baseUrl}${this.apiPath}/suppress/${incidentId}`, {'owner': this.irisInfo.username}))
+  }
+
   public register(regId: string, platform: string) {
     return this.renewAccessKey().flatMap(
       () => this.http.post(`${this.irisInfo.baseUrl}${this.apiPath}/device`, {'registration_id': regId, 'platform': platform}))

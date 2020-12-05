@@ -1,0 +1,124 @@
+<!--
+  Generated template for the SuppressNodesPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Suppress Nodes</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeSuppression()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item>
+    <ion-label>
+      <b *ngIf="allSelected; else elseBlock">All nodes selected</b>
+      <ng-template #elseBlock><b>Manually select nodes for suppression</b></ng-template>
+    </ion-label>
+    <ion-toggle slot="end" [(ngModel)]="allSelected" checked></ion-toggle>
+  </ion-item>
+
+
+  <ion-list *ngIf="!allSelected">
+    <ion-item text-wrap>
+      <ion-label #select>Nodes</ion-label>
+      <ion-select text-wrap (ngModelChange)="onChange()" [(ngModel)]="selectedNodes" multiple="true">
+        <ion-option text-wrap *ngFor="let node of incident.context['nodes']" value={{node[0]}}>{{ node }}</ion-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+
+
+  <div>
+    <ion-segment [(ngModel)]="suppressionType" color="dark" value="dateTime">
+      <ion-segment-button value="0" (click)="selectedSuppressionType(0)">
+        <ion-label><h6>Alert Clears</h6></ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="1" (click)="selectedSuppressionType(1)">
+        <ion-label><h6>Date & Time</h6></ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="2" (click)="selectedSuppressionType(2)">
+        <ion-label><h6>JIRA Closed</h6></ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  <div>
+    <ion-slides #suppressionSlider (ionSlideWillChange)="changeSuppressionType($event)">
+      <ion-slide>
+        <ion-card>
+          <ion-card-header>
+            <h2>Suppress until alerts clears</h2>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-label><h3>Start Time</h3></ion-label>
+              <ion-datetime displayFormat="D MMM YYYY H:mm A" min="2020" max="2030" placeholder="Select" [(ngModel)]="startTimeAlertClears" ></ion-datetime>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+      <ion-slide>
+        <ion-card>
+          <ion-card-header>
+            <h2>Suppress alert for a time window</h2>
+          </ion-card-header>
+          <ion-card-content>
+            <div>
+              <ion-list>
+                <ion-item>
+                  <ion-label><h3>Start Time</h3></ion-label>
+                  <ion-datetime displayFormat="D MMM YYYY H:mm A" min="2020" max="2030" placeholder="Select" [(ngModel)]="startTime" ></ion-datetime>
+                </ion-item>
+
+                <!-- to -->
+
+                <ion-item>
+                  <ion-label><h3>End Time</h3></ion-label>
+                  <ion-datetime displayFormat="D MMM YYYY H:mm A" min="2020" max="2030" placeholder="Select" [(ngModel)]="endTime" ></ion-datetime>
+                </ion-item>
+              </ion-list>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+      <ion-slide>
+        <ion-card>
+          <ion-card-header>
+            <h2>Suppress until JIRA Ticket closes</h2>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label><h3>Start Time</h3></ion-label>
+                <ion-datetime displayFormat="D MMM YYYY H:mm A" min="2020" max="2030" placeholder="Select" [(ngModel)]="startTimeJira" ></ion-datetime>
+              </ion-item>
+              <ion-item>
+                <ion-label><h3>JIRA #</h3></ion-label>
+                <ion-input type="text" clearInput=true [(ngModel)]="jiraTicket"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <div>
+    <ion-item>
+      <ion-label stacked>Comment</ion-label>
+      <ion-input type="text" clearInput=true [(ngModel)]="comment"></ion-input>
+    </ion-item>
+  </div>
+
+  <div>
+    <button ion-button round (click)="suppressSelected()">Suppress</button>
+  </div>
+</ion-content>

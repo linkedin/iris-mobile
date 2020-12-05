@@ -27,6 +27,21 @@
   </div>
   <!-- Graphs render here -->
   <div #graphContainer class="graph-content"></div>
+  <!-- Suppress Modal -->
+  <div *ngIf="!loading" padding>
+    <button ion-button round (click)="openSuppression()">Suppress Nodes</button>
+  </div>
+  <!-- Suppression result -->
+  <div *ngIf="wasSuppressed" padding>
+    <ion-card>
+      <ion-card-header>
+        <h2>Suppression Result for demo</h2>
+      </ion-card-header>
+      <ion-card-content>
+        {{ suppressionResult }}
+      </ion-card-content>
+    </ion-card>
+  </div>
   <!-- If we have a template, render that here -->
   <div *ngIf="template" [innerHTML]="source" padding></div>
   <!-- Otherwise, apply default styling -->
