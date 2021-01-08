@@ -40,7 +40,7 @@
   <div>
     <ion-segment [(ngModel)]="suppressionType" color="dark" value="dateTime">
       <ion-segment-button value="0" (click)="selectedSuppressionType(0)">
-        <ion-label><h6>Alert Clears</h6></ion-label>
+        <ion-label><h6>Alert Clear</h6></ion-label>
       </ion-segment-button>
       <ion-segment-button value="1" (click)="selectedSuppressionType(1)">
         <ion-label><h6>Date & Time</h6></ion-label>
@@ -59,7 +59,7 @@
           </ion-card-header>
           <ion-card-content>
             <ion-item>
-              <ion-label><h3>Start Time</h3></ion-label>
+              <ion-label>Start Time:</ion-label>
               <ion-datetime displayFormat="D MMM YYYY H:mm A" min="2020" max="2030" placeholder="Select" [(ngModel)]="startTimeAlertClears" ></ion-datetime>
             </ion-item>
           </ion-card-content>
@@ -74,14 +74,14 @@
             <div>
               <ion-list>
                 <ion-item>
-                  <ion-label><h3>Start Time</h3></ion-label>
+                  <ion-label>Start Time:</ion-label>
                   <ion-datetime displayFormat="D MMM YYYY H:mm A" min="2020" max="2030" placeholder="Select" [(ngModel)]="startTime" ></ion-datetime>
                 </ion-item>
 
                 <!-- to -->
 
                 <ion-item>
-                  <ion-label><h3>End Time</h3></ion-label>
+                  <ion-label>End Time:</ion-label>
                   <ion-datetime displayFormat="D MMM YYYY H:mm A" min="2020" max="2030" placeholder="Select" [(ngModel)]="endTime" ></ion-datetime>
                 </ion-item>
               </ion-list>
@@ -97,11 +97,11 @@
           <ion-card-content>
             <ion-list>
               <ion-item>
-                <ion-label><h3>Start Time</h3></ion-label>
+                <ion-label>Start Time:</ion-label>
                 <ion-datetime displayFormat="D MMM YYYY H:mm A" min="2020" max="2030" placeholder="Select" [(ngModel)]="startTimeJira" ></ion-datetime>
               </ion-item>
               <ion-item>
-                <ion-label><h3>JIRA #</h3></ion-label>
+                <ion-label>JIRA #:</ion-label>
                 <ion-input type="text" clearInput=true [(ngModel)]="jiraTicket"></ion-input>
               </ion-item>
             </ion-list>
@@ -113,12 +113,12 @@
 
   <div>
     <ion-item>
-      <ion-label stacked>Comment</ion-label>
+      <ion-label stacked><h6>Comment:</h6></ion-label>
       <ion-input type="text" clearInput=true [(ngModel)]="comment"></ion-input>
     </ion-item>
   </div>
 
   <div>
-    <button ion-button round (click)="suppressSelected()">Suppress</button>
+    <button ion-button round block (click)="suppressSelected()">Suppress</button>
   </div>
 </ion-content>

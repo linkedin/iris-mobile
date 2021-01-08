@@ -6,8 +6,9 @@
  */
 
 import { Component, ViewChild, Renderer2  } from '@angular/core';
-import { IonicPage, NavParams, Slides, ViewController } from 'ionic-angular';
+import { IonicPage, NavParams, Slides, ViewController, ToastController } from 'ionic-angular';
 import { IrisProvider, Incident } from '../../providers/iris/iris';
+import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 
 import moment from 'moment';
 
@@ -39,27 +40,45 @@ export class SuppressNodesPage {
 
   @ViewChild("suppressionSlider") slider: Slides;
 
-  constructor(private navParams: NavParams, private view: ViewController, private renderer: Renderer2) {
+  constructor(private navParams: NavParams, private view: ViewController, private renderer: Renderer2, private iris: IrisProvider, private irisInfo: IrisInfoProvider, private toastCtrl: ToastController) {
   }
 
-  // Close after successfully suppressing nodes
   suppressSelected(){
     this.suppressionCreated = true;
     if (this.allSelected) {
       this.toggleSelectAll();
     }
+    // build the suppression request body
+    var reqBody = {"nodes":this.selectedNodes, "fabric": this.incident["context"]["fabric"], "comment":this.comment, "user": this.irisInfo.username};
+    // add a comment if none was provided
+    if (reqBody["comment"].length == 0){
+      reqBody["comment"] = "Suppressed from Iris Mobile"
+    }
+    reqBody["filter"] = this.incident["context"]["filename"] + "/" + this.incident["context"]["name"]
 
-    // Replace below section with AJAX calls to IRIS Relays.
+
     if (this.suppressionType == "0") {
-        this.outPut = "User selected 'Alert Clears' suppression type for "+ this.selectedNodes.length +" node(s). Start time is '" + this.startTimeAlertClears + "'. User comments: "+ this.comment;
+        // date.parse returns unix timestamp in milliseconds, divide by 1000 to convert into seconds
+        reqBody["start"] = Date.parse(this.startTimeAlertClears)/1000;
+        reqBody["until_good"] = true;
     }
     else if (this.suppressionType == "1") {
-      this.outPut = "User selected 'Date & Time' suppression type for "+ this.selectedNodes.length +" node(s). Start time is '" + this.startTime + "'. End Time '"+ this.endTime +"'. User comments: "+ this.comment;
+      reqBody["start"] = Date.parse(this.startTime)/1000;;
+      reqBody["expiration"] = Date.parse(this.endTime)/1000;;
     }
     else if (this.suppressionType == "2") {
-      this.outPut = "User selected 'JIRA Closed' suppression type for "+ this.selectedNodes.length +" node(s). Start time is '" + this.startTimeJira + "'. JIRA Ticket # "+ this.jiraTicket +".User comments: "+ this.comment;
+      reqBody["start"] = Date.parse(this.startTimeJira)/1000;;
+      reqBody["jira"] = this.jiraTicket;
     }
 
+    this.iris.suppressNodes(reqBody).subscribe(
+      (data) => {
+        this.createToast('Successfully suppressed nodes')
+      },
+      (err) => {
+        this.createToast('Error: failed to suppress nodes')
+      }
+    );
     this.closeSuppression();
   }
 
@@ -84,7 +103,7 @@ export class SuppressNodesPage {
   toggleSelectAll(){
     var tempArray : Array<string> = [];
     for (let node of this.incident.context["nodes"]) {
-      tempArray.push(node)
+      tempArray.push(node[0])
     }
     this.selectedNodes = tempArray
   }
@@ -103,6 +122,17 @@ export class SuppressNodesPage {
       const element = this.renderer.selectRootElement('.select-text');
       this.renderer.setProperty(element, 'innerHTML', this.selectedNodes.length + " selected")
     }, 0);
+  }
+
+  createToast(message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'bottom',
+      showCloseButton: true,
+      closeButtonText: 'OK'
+    });
+    toast.present();
   }
 
 
