@@ -1,7 +1,7 @@
 import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, Pipe, PipeTransform } from '@angular/core';
 import { IrisProvider, Incident } from './../../providers/iris/iris';
 import { TemplateProvider } from './../../providers/template/template';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { Modal, ModalController, NavController, NavParams, ToastController } from 'ionic-angular';
 import { GraphBlockComponent } from '../../components/graph-block/graph-block';
 import handlebars from 'handlebars';
 import he from 'he';
@@ -19,8 +19,6 @@ export class FormatContextPipe implements PipeTransform {
     }
   }
 }
-
-
 @Component({
   selector: 'page-incident-context',
   templateUrl: 'incident-context.html',
@@ -34,6 +32,10 @@ export class IncidentContextPage {
   loading: boolean;
   noTemplate: boolean = false;
   disableClaim: boolean;
+  // Suppression disabled by default - LinkedIn internal feature
+  suppressionEnabled = process.env.SUPPRESSION_ENABLED_BOOL;
+  supprAllowedApp = process.env.SUPPRESSION_ENABLED_APPLICATION
+  suppressionResult: any;
 
   // Placeholder for page location to render graphs
   @ViewChild('graphContainer', {read: ViewContainerRef }) graphContainer;
@@ -41,7 +43,8 @@ export class IncidentContextPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private iris: IrisProvider, private templateProvider: TemplateProvider,
     private toastCtrl: ToastController, private irisInfo: IrisInfoProvider,
-    private componentFactoryResolver: ComponentFactoryResolver) {
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private suppress: ModalController) {
   }
 
   ionViewDidLoad() {
@@ -52,6 +55,15 @@ export class IncidentContextPage {
         if (this.navParams.get('claim')) {
           this.claim();
         }
+
+        // determine if suppression is available for this incident and verify all needed info is present in context
+        if (!("fabric" in this.incident["context"] && "nodes" in this.incident["context"]  && "filename" in this.incident["context"] && "name" in this.incident["context"] && "zone_nodes" in this.incident["context"])){
+          this.suppressionEnabled = "false";
+        }
+        else if (!(this.incident["application"].toLowerCase() == this.supprAllowedApp && this.incident["context"]["zone_nodes"].length == 0)){
+          this.suppressionEnabled = "false";
+        }
+
         // Get template for this incident
         this.templateProvider.getTemplate(this.incident['application']).subscribe(data => {
           this.template = data;
@@ -80,6 +92,19 @@ export class IncidentContextPage {
         });
       }
     )
+  }
+
+  openSuppression(){
+    const incidentSuppression: Modal = this.suppress.create('SuppressNodesPage', {incident: this.incident});
+    incidentSuppression.present();
+
+    incidentSuppression.onDidDismiss((result) =>{
+      if (Object.keys(result).length > 0){
+        this.suppressionResult = result;
+      }
+
+    })
+
   }
 
   claim() {

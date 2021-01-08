@@ -34,55 +34,55 @@ import { LogoutProvider } from '../providers/logout/logout';
 
 @NgModule({
   declarations: [
-    MyApp,
-    IncidentsPage,
-    IncidentContextPage,
-    LoginPage,
-    OncallPage,
-    OncallUserPage,
-    OncallTeamPage,
-    TabsPage,
-    GraphBlockComponent,
-    FormatContextPipe,
-    FilterModalPage,
     ApiUrlPage,
-    PrivacyPolicyPage
+    FilterModalPage,
+    FormatContextPipe,
+    GraphBlockComponent,
+    IncidentContextPage,
+    IncidentsPage,
+    LoginPage,
+    MyApp,
+    OncallPage,
+    OncallTeamPage,
+    OncallUserPage,
+    PrivacyPolicyPage,
+    TabsPage
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
     FormsModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    IncidentsPage,
-    IncidentContextPage,
-    OncallUserPage,
-    OncallTeamPage,
-    TabsPage,
-    LoginPage,
-    OncallPage,
-    GraphBlockComponent,
-    FilterModalPage,
     ApiUrlPage,
-    PrivacyPolicyPage
+    FilterModalPage,
+    GraphBlockComponent,
+    IncidentContextPage,
+    IncidentsPage,
+    LoginPage,
+    MyApp,
+    OncallPage,
+    OncallTeamPage,
+    OncallUserPage,
+    PrivacyPolicyPage,
+    TabsPage
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    IrisProvider,
-    TemplateProvider,
+    BarcodeScanner,
+    Deeplinks,
     InAppBrowser,
     IrisInfoProvider,
-    BarcodeScanner,
+    IrisProvider,
+    LogoutProvider,
     Push,
-    Deeplinks,
-    LogoutProvider
+    SplashScreen,
+    StatusBar,
+    TemplateProvider,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ]
 })
 export class AppModule {}

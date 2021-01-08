@@ -27,6 +27,11 @@
   </div>
   <!-- Graphs render here -->
   <div #graphContainer class="graph-content"></div>
+  <!-- Suppress Modal -->
+  <!-- only show this option if suppression is enabled in config and incident belongs to allowlisted application -->
+  <div *ngIf="(!loading && !incident?.active && suppressionEnabled == 'true')">
+    <button ion-button block round (click)="openSuppression()">Suppress Alert</button>
+  </div>
   <!-- If we have a template, render that here -->
   <div *ngIf="template" [innerHTML]="source" padding></div>
   <!-- Otherwise, apply default styling -->

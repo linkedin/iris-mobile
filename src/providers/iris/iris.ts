@@ -94,8 +94,8 @@ export class IrisProvider {
       this.oncallServices = [];
 
     }
-  
-  public initOncallCache() { 
+
+  public initOncallCache() {
     this.loadOncallUserCache();
     this.loadOncallTeamCache();
     this.loadOncallServiceCache();
@@ -307,11 +307,11 @@ export class IrisProvider {
       let startObservable = this.renewAccessKey(),
       team_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams/${team_name}`),
       summary_get = this.http.get(`${this.irisInfo.baseUrl}${this.oncallApiPath}/teams/${team_name}/summary`);
-  
+
       // Get all user data from multiple api endpoints
       var returnObservable = startObservable
         .flatMap(() => forkJoin([team_get, summary_get]));
-      
+
       return returnObservable.map(
         (data) => {
               let team = new OncallTeam;
@@ -325,7 +325,7 @@ export class IrisProvider {
             }
         );
     }
-  
+
   // encode team array as string to persist in local storage
   public refreshOncallTeamCache(){
 
@@ -407,9 +407,8 @@ export class IrisProvider {
     })
   }
 
-  
+
   public getOncallPinnedTeams(username) : Observable<string[]> {
-    
     let startObservable = this.renewAccessKey();
 
     // Get pinned teams according to params
@@ -486,6 +485,14 @@ export class IrisProvider {
   public getGraph(source) {
     const options = { params: new HttpParams().set('graph_url', source)}
     return this.renewAccessKey().flatMap(() => this.http.get(`${this.irisInfo.baseUrl}${this.apiPath}/graph`, options))
+  }
+
+  // Suppress alerts disabled by default - LinkedIn internal feature
+  public suppressNodes(body) {
+    let startObservable = this.renewAccessKey();
+    var returnObservable = startObservable
+      .flatMap(() => this.http.post(`${this.irisInfo.baseUrl}${this.apiPath}/suppression`, body));
+    return returnObservable;
   }
 
   public register(regId: string, platform: string) {
