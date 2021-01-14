@@ -6,6 +6,7 @@ import { GraphBlockComponent } from '../../components/graph-block/graph-block';
 import handlebars from 'handlebars';
 import he from 'he';
 import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
+import { SuppressNodesPage } from '../suppress-nodes/suppress-nodes';
 
 
 // Return pretty JSON if input is an object
@@ -95,16 +96,8 @@ export class IncidentContextPage {
   }
 
   openSuppression(){
-    const incidentSuppression: Modal = this.suppress.create('SuppressNodesPage', {incident: this.incident});
-    incidentSuppression.present();
-
-    incidentSuppression.onDidDismiss((result) =>{
-      if (Object.keys(result).length > 0){
-        this.suppressionResult = result;
-      }
-
-    })
-
+    let incidentSuppression = this.suppress.create(SuppressNodesPage, {incident: this.incident});
+    return incidentSuppression.present();
   }
 
   claim() {

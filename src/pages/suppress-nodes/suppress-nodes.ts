@@ -12,7 +12,6 @@ import { IrisInfoProvider } from '../../providers/iris_info/iris_info';
 
 import moment from 'moment';
 
-@IonicPage()
 @Component({
   selector: 'page-suppress-nodes',
   templateUrl: 'suppress-nodes.html',
@@ -133,6 +132,13 @@ export class SuppressNodesPage {
       closeButtonText: 'OK'
     });
     toast.present();
+  }
+
+  dismiss(update: boolean) {
+    // update == false if user pressed cancel, true if user pressed confirm.
+    this.view.dismiss({
+      update: update
+    });
   }
 
 

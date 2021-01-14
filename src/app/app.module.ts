@@ -15,6 +15,7 @@ import { OncallUserPage } from '../pages/oncall-user/oncall-user';
 import { OncallTeamPage } from '../pages/oncall-team/oncall-team';
 import { TabsPage } from '../pages/tabs/tabs';
 import { FilterModalPage } from '../pages/filter-modal/filter-modal';
+import { SuppressNodesPage } from '../pages/suppress-nodes/suppress-nodes';
 import { ApiUrlPage } from '../pages/api-url/api-url';
 import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
 
@@ -36,6 +37,7 @@ import { LogoutProvider } from '../providers/logout/logout';
   declarations: [
     ApiUrlPage,
     FilterModalPage,
+    SuppressNodesPage,
     FormatContextPipe,
     GraphBlockComponent,
     IncidentContextPage,
@@ -59,6 +61,7 @@ import { LogoutProvider } from '../providers/logout/logout';
   entryComponents: [
     ApiUrlPage,
     FilterModalPage,
+    SuppressNodesPage,
     GraphBlockComponent,
     IncidentContextPage,
     IncidentsPage,
