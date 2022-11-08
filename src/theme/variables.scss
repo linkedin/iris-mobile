@@ -38,7 +38,25 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  background: #fff,
+  background-alt: #dcdce3,
+  background-alt-light: #e9e9f0,
+  foreground: #000,
+  foreground-alt: #292929,
+  foreground-70pct: rgba(0, 0, 0, .7)
+);
+
+$colorsDark: (
+  primary:    #0073B1,
+  secondary:  #32db64,
+  danger:     #f53d3d,
+  background: #000,
+  background-alt: #1c1c1d,
+  background-alt-light: #656569,
+  foreground: #fff,
+  foreground-alt: #f5f5f5,
+  foreground-70pct: rgba(255, 255, 255, .7)
 );
 
 

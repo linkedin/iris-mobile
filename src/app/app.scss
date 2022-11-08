@@ -1,5 +1,6 @@
 // http://ionicframework.com/docs/theming/
 
+@use "sass:map";
 
 // App Global Sass
 // --------------------------------------------------
@@ -123,4 +124,102 @@ body {
 .popover-content ion-list ion-label
 {
     font-size:12px !important;
+}
+
+.action-sheet-ios .action-sheet-button {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.action-sheet-md .action-sheet-button {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.item-ios {
+    padding-left: 0 !important;
+}
+
+.list-ios .item-inner {
+    padding-left: 16px !important;
+}
+
+.item-ios.item-block .item-inner {
+    padding-left: 16px !important;
+}
+
+.bar-buttons-ios[end] {
+    margin-right: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+    ion-app {
+        color: map-get($map: $colorsDark, $key: "foreground") !important;
+        background: map-get($map: $colorsDark, $key: "background") !important;
+    }
+
+    ion-content {
+        color: map-get($map: $colorsDark, $key: "foreground");
+        background: map-get($map: $colorsDark, $key: "background");
+    }
+
+    ion-toolbar {
+        .item-md.item-block .item-inner, .item-ios.item-block .item-inner {
+            border-bottom: 0 !important;
+        }
+    }
+
+    .ion-backdrop {
+        opacity: 0.8;
+    }
+
+    .toolbar-background-ios {
+        background: map-get($map: $colorsDark, $key: "background");
+    }
+
+    .content-md, .content-ios, .item-md, .item-ios, .item-md-light, .item-divider-md-light, .item-ios-light, .item-divider-ios-light {
+        color: map-get($map: $colorsDark, $key: "foreground");
+        background: map-get($map: $colorsDark, $key: "background");
+    }
+
+    .action-sheet-md .action-sheet-group, .action-sheet-ios .action-sheet-group {
+        background: map-get($map: $colorsDark, $key: "background-alt");
+    }
+
+    .action-sheet-md .action-sheet-button, .action-sheet-ios .action-sheet-button {
+        color: map-get($map: $colorsDark, $key: "foreground");
+    }
+
+    .toolbar-background-md, .toolbar-content-md .item-md, .toolbar-background-ios, .toolbar-content-ios .item-ios {
+        background: map-get($map: $colorsDark, $key: "background-alt");
+    }
+
+    .alert-md .alert-message, .alert-md .alert-input-group, .alert-ios .alert-wrapper, .alert-md .alert-wrapper {
+        color: map-get($map: $colorsDark, $key: "foreground");
+        background: map-get($map: $colorsDark, $key: "background-alt");
+    }
+
+    .toolbar-title-md, .toolbar-title-ios {
+        color: map-get($map: $colorsDark, $key: "foreground");
+    }
+
+    .action-sheet-md .action-sheet-button.activated, .action-sheet-ios .action-sheet-button.activated {
+        color: map-get($map: $colorsDark, $key: "foreground");
+        background: map-get($map: $colorsDark, $key: "background-alt-light");
+    }
+
+    .card-md, .card-ios {
+        color: map-get($map: $colorsDark, $key: "foreground");
+        background: map-get($map: $colorsDark, $key: "background-alt");
+
+        p {
+            color: map-get($map: $colorsDark, $key: "foreground");
+        }
+    }
+
+    .card-title-md, .card-title-ios, .chip-md, .chip-ios {
+        color: map-get($map: $colorsDark, $key: "foreground");
+    }
 }
