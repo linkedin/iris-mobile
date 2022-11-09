@@ -1,8 +1,44 @@
+@use "sass:map";
+
 .highlight {
   position: absolute;
   height: 7px;
-  background: lightblue;
-  transition-duration: 150ms;
-  transition-timing-function: ease;
+  background: transparent;
   z-index: 100;
+}
+
+@media (prefers-color-scheme: light) {
+  .tabbar {
+    background: map-get($map: $colors, $key: "background-alt-light") !important;
+  }
+
+  .tab-button-icon, .tab-button {
+    color: map-get($map: $colors, $key: "foreground-70pct") !important;
+  }
+
+  .tabs-md .tab-button[aria-selected=true], .tabs-ios .tab-button[aria-selected=true] {
+    color: map-get($map: $colors, $key: "primary") !important;
+
+    .tab-button-icon {
+      color: map-get($map: $colors, $key: "primary") !important;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .tabbar {
+    background: map-get($map: $colorsDark, $key: "background-alt") !important;
+  }
+
+  .tab-button-icon, .tab-button {
+    color: map-get($map: $colorsDark, $key: "foreground-70pct") !important;
+  }
+
+  .tabs-md .tab-button[aria-selected=true], .tabs-ios .tab-button[aria-selected=true] {
+    color: map-get($map: $colorsDark, $key: "primary") !important;
+
+    .tab-button-icon {
+      color: map-get($map: $colorsDark, $key: "primary") !important;
+    }
+  }
 }

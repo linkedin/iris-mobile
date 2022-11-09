@@ -1,3 +1,5 @@
+@use "sass:map";
+
 page-incident-context {
 
     .incident-loader {
@@ -82,5 +84,26 @@ page-incident-context {
     hr.context-divider {
         width: 95%;
         background-color: #aaa;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    page-incident-context {
+        .context-content {
+            background: map-get($map: $colorsDark, $key: "background");
+        }
+    
+        .graph-content {
+            background: map-get($map: $colorsDark, $key: "background-alt");
+        }
+    }
+
+    .segment-md-primary .segment-button.activated, .segment-md-primary .segment-button.segment-activated {
+        color: map-get($map: $colorsDark, $key: "foreground");
+        border-color: map-get($map: $colorsDark, $key: "foreground");
+    }
+
+    .segment-md-primary .segment-button {
+        color: map-get($map: $colorsDark, $key: "foreground-alt");
     }
 }

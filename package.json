@@ -15,7 +15,7 @@
     "@angular/common": "5.2.11",
     "@angular/compiler": "5.2.11",
     "@angular/compiler-cli": "5.2.11",
-    "@angular/core": "11.0.5",
+    "@angular/core": "5.2.11",
     "@angular/forms": "5.2.11",
     "@angular/http": "5.2.11",
     "@angular/platform-browser": "5.2.11",
@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.3",
-    "cordova-ios": "^5.0.0",
+    "cordova-ios": "^6.2.0",
     "cordova-plugin-inappbrowser": "^4.1.0",
     "typescript": "~2.6.2"
   },
